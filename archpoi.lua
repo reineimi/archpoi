@@ -141,14 +141,18 @@ say(4)
 pout 'Listing timezones in 6s...\n(Use [up/down/pgup/pgdn] to scroll, and [q] to quit)\n'
 os.execute 'sleep 6 && timedatectl list-timezones'
 print ''
+end
+
+-- Timezone
 log[5] = {'What\'s your timezone? Please use Region/City only format',{
 	function(a)
 		poi.tz = a
-		out('timedatectl set-timezone '..a..' && echo "-- Timezone set"')
+		if not poi.skip then
+			out('timedatectl set-timezone '..a..' && echo "-- Timezone set"')
+		end
 	end
 }}
 say(5)
-end
 
 -- Linux installation
 log[6] = {'Install Linux?',{
