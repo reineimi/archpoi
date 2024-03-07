@@ -72,11 +72,13 @@ log[2] = {'What is your username?',{
 say(2)
 
 -- Skip
-log[3] = {'Skip to installation?\nWrite your disk id (ex: sda) to confirm',{
+log[3] = {'Skip disk formatting and internet connection?\nWrite your disk id (ex: sda) to confirm',{
 	function(a)
 		if a:match('sd') then
 			poi.skip = true
 			poi.sdx = a
+			out('mount /dev/%s'..poi.sdx..'2 /mnt')
+			out('mount --mkdir /dev/%s'..poi.sdx..'1 /mnt/boot')
 		end
 	end
 }}
@@ -134,7 +136,6 @@ log[4] = {'Let\'s check internet connection. Received bytes?',{
 	end,
 }}
 say(4)
-end
 
 -- Timezone (pre)
 pout 'Listing timezones in 6s...\n(Use [up/down/pgup/pgdn] to scroll, and [q] to quit)\n'
@@ -147,26 +148,27 @@ log[5] = {'What\'s your timezone? Please use Region/City only format',{
 	end
 }}
 say(5)
+end
 
 -- Linux installation
 log[6] = {'Install Linux?',{
 	y = function(a)
 		pout 'Installing Linux (This will take some time)'
 		pout 'Reopen the script afterwards (lua archpoi.lua)\n'
+		out 'cp archpoi.lua /mnt'
 		out 'pacstrap -K /mnt base linux linux-firmware dosfstools btrfs-progs xfsprogs f2fs-tools ntfs-3g lua'
 		out 'genfstab -U /mnt >> /mnt/etc/fstab'
-		out 'curl -o /mnt/archpoi.lua https://raw.githubusercontent.com/reineimi/archpoi/x/archpoi.lua'
 		os.execute 'arch-chroot /mnt'
 		os.exit()
 	end,
 	n = function()
-		out 'pacman -Syu sudo nano curl'
+		out 'pacman -S sudo nano curl'
 	end
 }}
 say(6)
 
 -- Timezone (post)
-out('ln -sf /usr/share/zoneinfo/'..poi.tz..' /etc/localtime && hwclock --systohc)')
+out('ln -sf /usr/share/zoneinfo/'..poi.tz..' /etc/localtime && hwclock --systohc')
 
 -- Locale
 pout 'Done! Now choose preferred locales (delete #, then press Ctrl+S and Ctrl+X)'
