@@ -62,6 +62,23 @@ log[1] = {'Hello! Do you want to see command results?',{
 }}
 say(1)
 
+-- Username
+log[2] = {'What is your username?',{
+	function(a)
+		poi.user = a
+		pout('Great! Nice to meet you, '..a..'!')
+	end
+}}
+say(2)
+
+-- Skip
+log[3] = {'Skip to installation?',{
+	y = function() poi.skip = true end,
+	n = function() poi.skip = false end,
+}}
+say(3)
+
+if not poi.skip then
 -- Disk formatting
 pout 'Let\'s finish formatting the disk, fill the data below:'
 io.write 'Disk (for example, sda): '
@@ -77,7 +94,7 @@ local pmedia = io.read()
 print ''
 
 out(string.format('mkfs.fat -F 32 /dev/%s%s', sdx, pboot))
-out(string.format('mkfs.btrfs -L root -n 16k /dev/%s%s', sdx, proot))
+out(string.format('mkfs.btrfs -f -L root -n 16k /dev/%s%s', sdx, proot))
 out(string.format('mkswap /dev/%s%s', sdx, pswap))
 
 out(string.format('mount /dev/%s%s /mnt', sdx, proot))
@@ -89,18 +106,9 @@ if pmedia~='' then
 	out(string.format('mount --mkdir /dev/%s%s /mnt/media', sdx, pmedia))
 end
 
--- Username
-log[2] = {'What is your username?',{
-	function(a)
-		poi.user = a
-		pout('Great! Nice to meet you, '..a..'!')
-	end
-}}
-say(2)
-
 -- Internet connection
 out 'ping -c 2 archlinux.org'
-log[3] = {'Let\'s check internet connection. Received bytes?',{
+log[4] = {'Let\'s check internet connection. Received bytes?',{
 	y = function()
 		pout 'Seems like we\'re connected!'
 	end,
@@ -118,28 +126,34 @@ log[3] = {'Let\'s check internet connection. Received bytes?',{
 		end
 	end,
 }}
-say(3)
+say(4)
 
 -- Timezone (pre)
 pout 'Listing timezones in 6s...\n(Use arrows to scroll and write "q" to quit)\n'
---os.execute 'sleep 6 && timedatectl list-timezones'
-log[4] = {'What\'s your timezone? Please use Region/City only format',{
+os.execute 'sleep 6 && timedatectl list-timezones'
+log[5] = {'What\'s your timezone? Please use Region/City only format',{
 	function(a)
 		poi.tz = a
 		out('timedatectl set-timezone '..a)
 	end
 }}
-say(4)
+say(5)
+end
 
 -- Linux installation
-pout 'Installing Linux...'
-out 'pacstrap -K /mnt base linux linux-firmware dosfstools btrfs-progs xfsprogs f2fs-tools ntfs3'
-out 'genfstab -U /mnt >> /mnt/etc/fstab'
-out 'arch-chroot /mnt'
-
--- Timezone (post)
-out('ln -sf /usr/share/zoneinfo/'..poi.tz..' /etc/localtime && hwclock --systohc')
-print ''
+log[6] = {'Install Linux? (if script closes, reopen it and skip this step)',{
+	y = function(a)
+		pout 'Installing Linux...'
+		out 'pacstrap -K /mnt base linux linux-firmware dosfstools btrfs-progs xfsprogs f2fs-tools ntfs-3g'
+		out 'genfstab -U /mnt >> /mnt/etc/fstab'
+		out 'arch-chroot /mnt'
+		-- Timezone (post)
+		out('ln -sf /usr/share/zoneinfo/'..poi.tz..' /etc/localtime && hwclock --systohc')
+		print ''
+	end,
+	n = function() end
+}}
+say(6)
 
 -- Locale
 pout 'Done! Now choose preferred locales (delete #, then press Ctrl+S and Ctrl+X)'
@@ -153,14 +167,14 @@ pout [[Great. You can choose between them later in:
 ]]
 
 -- Hostname & root password
-log[5] = {'What would you call your computer (hostname)?',{
+log[7] = {'What would you call your computer (hostname)?',{
 	function(a)
 		out('echo "'..a..'" >> /etc/hostname')
 		pout 'Now, create default (root) password:'
 		os.execute 'passwd'
 	end
 }}
-say(5)
+say(7)
 
 -- Bootloader
 pout 'Installing GRUB bootloader...'
@@ -173,6 +187,7 @@ print ''
 -- GNOME and essentials
 pout 'Amazing! Let\'s finish it by installing GNOME and essential packages'
 local packages = {
+	'sudo',
 	'archlinux-keyring',
 	'nano',
 	'gnome',
