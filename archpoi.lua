@@ -88,7 +88,7 @@ if not poi.skip then
 -- Disk formatting
 pout 'Let\'s finish formatting the disk, fill the data below:'
 io.write 'Disk (for example, sda): '
-poi.sdx = io.read()
+local sdx = io.read()
 io.write 'boot (ex: 1): '
 local pboot = io.read()
 io.write 'root (ex: 2): '
@@ -99,19 +99,19 @@ io.write 'media (ex: 4; optional): '
 local pmedia = io.read()
 print ''
 
-out(string.format('mkfs.fat -F 32 /dev/%s%s', poi.sdx, pboot))
-out(string.format('mkfs.btrfs -f -L root -n 16k /dev/%s%s', poi.sdx, proot))
+out(string.format('mkfs.fat -F 32 /dev/%s%s', sdx, pboot))
+out(string.format('mkfs.btrfs -f -L root -n 16k /dev/%s%s', sdx, proot))
 
-out(string.format('mount /dev/%s%s /mnt', poi.sdx, proot))
-out(string.format('mount --mkdir /dev/%s%s /mnt/boot', poi.sdx, pboot))
+out(string.format('mount /dev/%s%s /mnt', sdx, proot))
+out(string.format('mount --mkdir /dev/%s%s /mnt/boot', sdx, pboot))
 
 if pswap~='' then
-	out(string.format('mkswap /dev/%s%s', poi.sdx, pswap))
-	out(string.format('swapon /dev/%s%s', poi.sdx, pswap))
+	out(string.format('mkswap /dev/%s%s', sdx, pswap))
+	out(string.format('swapon /dev/%s%s', sdx, pswap))
 end
 if pmedia~='' then
-	out(string.format('mkfs.btrfs -L files -n 16k /dev/%s%s', poi.sdx, pmedia))
-	out(string.format('mount --mkdir /dev/%s%s /mnt/media', poi.sdx, pmedia))
+	out(string.format('mkfs.btrfs -L files -n 16k /dev/%s%s', sdx, pmedia))
+	out(string.format('mount --mkdir /dev/%s%s /mnt/media', sdx, pmedia))
 end
 print ''
 
@@ -200,8 +200,9 @@ say(7)
 -- Bootloader
 pout 'Installing GRUB bootloader...'
 out 'pacman -S grub efibootmgr'
-out 'mkdir /boot/EFI && mkdir /boot/EFI/GRUB'
-out 'grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB'
+out 'mkdir /boot/efi'
+out 'mount /dev/sda1 /boot/efi'
+out 'grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB'
 os.execute 'nano /etc/default/grub && grub-mkconfig -o /boot/grub/grub.cfg'
 print ''
 
@@ -227,4 +228,4 @@ end
 
 print ''
 pout 'Done! Hope to see you again sometime!\n'
-out('umount -a /dev/'..poi.sdx..' && sleep 2 && reboot')
+out('umount /mnt && sleep 2 && reboot')
