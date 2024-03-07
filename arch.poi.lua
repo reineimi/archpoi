@@ -135,7 +135,7 @@ print ''
 log[5] = {'What\'s your timezone? Please use Region/City only format',{
 	function(a)
 		poi.tz = a
-		out('timedatectl set-timezone '..a..'echo "-- Timezone set"')
+		out('timedatectl set-timezone '..a..' && echo "-- Timezone set"')
 	end
 }}
 say(5)
