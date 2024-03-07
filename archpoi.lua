@@ -163,7 +163,7 @@ log[6] = {'Install Linux? (if script closes, reopen it and skip this step)',{
 say(6)
 
 -- Timezone (post)
-out('ln -sf /usr/share/zoneinfo/'..poi.tz..' /etc/localtime && hwclock --systohc)
+out('ln -sf /usr/share/zoneinfo/'..poi.tz..' /etc/localtime && hwclock --systohc)')
 
 -- Locale
 pout 'Done! Now choose preferred locales (delete #, then press Ctrl+S and Ctrl+X)'
