@@ -77,8 +77,8 @@ log[3] = {'Skip disk formatting and internet connection?\nWrite your disk id (ex
 		if a:match('sd') then
 			poi.skip = true
 			poi.sdx = a
-			out('mount /dev/%s'..poi.sdx..'2 /mnt')
-			out('mount --mkdir /dev/%s'..poi.sdx..'1 /mnt/boot')
+			out('mount /dev/'..poi.sdx..'2 /mnt')
+			out('mount --mkdir /dev/'..poi.sdx..'1 /mnt/boot')
 		end
 	end
 }}
