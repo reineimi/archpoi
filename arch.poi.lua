@@ -83,13 +83,13 @@ if not poi.skip then
 pout 'Let\'s finish formatting the disk, fill the data below:'
 io.write 'Disk (for example, sda): '
 local sdx = io.read()
-io.write 'boot (default: 1): '
+io.write 'boot (ex: 1): '
 local pboot = io.read()
-io.write 'root (default: 2): '
+io.write 'root (ex: 2): '
 local proot = io.read()
-io.write 'swap (default: 3; optional): '
+io.write 'swap (ex: 3; optional): '
 local pswap = io.read()
-io.write 'media (default: 4; optional): '
+io.write 'media (ex: 4; optional): '
 local pmedia = io.read()
 print ''
 
@@ -131,10 +131,11 @@ say(4)
 -- Timezone (pre)
 pout 'Listing timezones in 6s...\n(Use arrows to scroll and write "q" to quit)\n'
 os.execute 'sleep 6 && timedatectl list-timezones'
+print ''
 log[5] = {'What\'s your timezone? Please use Region/City only format',{
 	function(a)
 		poi.tz = a
-		out('timedatectl set-timezone '..a)
+		out('timedatectl set-timezone '..a..'echo "-- Timezone set"')
 	end
 }}
 say(5)
@@ -143,10 +144,10 @@ end
 -- Linux installation
 log[6] = {'Install Linux? (if script closes, reopen it and skip this step)',{
 	y = function(a)
-		pout 'Installing Linux...'
-		out 'pacstrap -K /mnt base linux linux-firmware dosfstools btrfs-progs xfsprogs f2fs-tools ntfs-3g'
+		pout 'Installing Linux (This will take some time)...\n'
+		out 'pacstrap -K /mnt base linux linux-firmware dosfstools btrfs-progs xfsprogs f2fs-tools ntfs-3g lua'
 		out 'genfstab -U /mnt >> /mnt/etc/fstab'
-		out 'arch-chroot /mnt'
+		out 'arch-chroot /mnt && curl -LO https://raw.githubusercontent.com/reineimi/archpoi/main/arch.poi.lua && lua arch.poi.lua'
 		-- Timezone (post)
 		out('ln -sf /usr/share/zoneinfo/'..poi.tz..' /etc/localtime && hwclock --systohc')
 		print ''
