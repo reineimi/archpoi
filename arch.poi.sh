@@ -11,7 +11,7 @@ pacman -S archlinux-keyring nano
 #pacman -S lua;
 
 printf '\nRetrieving the script...\n';
-curl -LO https://raw.githubusercontent.com/reineimi/archpoi/main/arch.poi.sh;
+curl -LO https://raw.githubusercontent.com/reineimi/archpoi/main/arch.poi.lua;
 alias poi='lua arch.poi.lua';
 
 out 'fdisk -l'
@@ -26,4 +26,4 @@ echo '	3 swap - 2G or more. Swap will extend your RAM space. You can disable it 
 echo '	4 media (Optional) - any. Free space for your files in case system breaks'
 echo '!! Remember your disk and the order of partitions !!'
 
-printf "\n\nOnce you've finished, write:  poi\n";
+printf "\n\nOnce you've finished, write:  lua arch.poi.lua\n";
