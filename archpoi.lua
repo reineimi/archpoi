@@ -99,12 +99,14 @@ print ''
 
 out(string.format('mkfs.fat -F 32 /dev/%s%s', poi.sdx, pboot))
 out(string.format('mkfs.btrfs -f -L root -n 16k /dev/%s%s', poi.sdx, proot))
-out(string.format('mkswap /dev/%s%s', poi.sdx, pswap))
 
 out(string.format('mount /dev/%s%s /mnt', poi.sdx, proot))
 out(string.format('mount --mkdir /dev/%s%s /mnt/boot', poi.sdx, pboot))
-out(string.format('swapon /dev/%s%s', poi.sdx, pswap))
 
+if pswap~='' then
+	out(string.format('mkswap /dev/%s%s', poi.sdx, pswap))
+	out(string.format('swapon /dev/%s%s', poi.sdx, pswap))
+end
 if pmedia~='' then
 	out(string.format('mkfs.btrfs -L files -n 16k /dev/%s%s', poi.sdx, pmedia))
 	out(string.format('mount --mkdir /dev/%s%s /mnt/media', poi.sdx, pmedia))
@@ -147,17 +149,18 @@ log[5] = {'What\'s your timezone? Please use Region/City only format',{
 say(5)
 
 -- Linux installation
-log[6] = {'Install Linux? (if script closes, reopen it and skip this step)',{
+log[6] = {'Install Linux?',{
 	y = function(a)
-		pout 'Installing Linux (This will take some time)...\n'
+		pout 'Installing Linux (This will take some time)'
+		pout 'Reopen the script afterwards (lua archpoi.lua)\n'
 		out 'pacstrap -K /mnt base linux linux-firmware dosfstools btrfs-progs xfsprogs f2fs-tools ntfs-3g lua'
 		out 'genfstab -U /mnt >> /mnt/etc/fstab'
-		out 'curl -o /mnt/archpoi.lua https://raw.githubusercontent.com/reineimi/archpoi/main/archpoi.lua'
+		out 'curl -o /mnt/archpoi.lua https://raw.githubusercontent.com/reineimi/archpoi/x/archpoi.lua'
 		os.execute 'arch-chroot /mnt'
 		os.exit()
 	end,
 	n = function()
-		out 'pacman -S sudo nano curl'
+		out 'pacman -Syu sudo nano curl'
 	end
 }}
 say(6)
@@ -211,7 +214,7 @@ local services = {
 	'gdm',
 	'NetworkManager',
 }
-out('pacman -Syu '..table.concat(packages, ' '))
+out('pacman -S '..table.concat(packages, ' '))
 for _, v in ipairs(services) do
 	os.execute('systemctl enable '..v)
 end
