@@ -171,6 +171,8 @@ log[7] = {'What would you call your computer (hostname)?',{
 		out('echo "'..a..'" >> /etc/hostname')
 		pout 'Now, create default (root) password:'
 		os.execute 'passwd'
+		pout('And your ('..poi.user..') user password:')
+		os.execute(string.format('useradd -m %s && passwd %s && usermod -a -G sudo %s', poi.user, poi.user, poi.user))
 	end
 }}
 say(7)
@@ -198,8 +200,8 @@ local services = {
 	'gdm',
 	'NetworkManager',
 }
-out('pacman -Syu '..table.concat(pkgs, ' '))
-for _, v in ipairs(svcs) do
+out('pacman -Syu '..table.concat(packages, ' '))
+for _, v in ipairs(services) do
 	os.execute('systemctl enable '..v)
 end
 
