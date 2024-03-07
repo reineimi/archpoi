@@ -105,6 +105,7 @@ if pmedia~='' then
 	out(string.format('mkfs.btrfs -L files -n 16k /dev/%s%s', sdx, pmedia))
 	out(string.format('mount --mkdir /dev/%s%s /mnt/media', sdx, pmedia))
 end
+print ''
 
 -- Internet connection
 out 'ping -c 2 archlinux.org'
@@ -147,10 +148,7 @@ log[6] = {'Install Linux? (if script closes, reopen it and skip this step)',{
 		pout 'Installing Linux (This will take some time)...\n'
 		out 'pacstrap -K /mnt base linux linux-firmware dosfstools btrfs-progs xfsprogs f2fs-tools ntfs-3g lua'
 		out 'genfstab -U /mnt >> /mnt/etc/fstab'
-		out 'arch-chroot /mnt && curl -LO https://raw.githubusercontent.com/reineimi/archpoi/main/arch.poi.lua && lua arch.poi.lua'
-		-- Timezone (post)
-		out('ln -sf /usr/share/zoneinfo/'..poi.tz..' /etc/localtime && hwclock --systohc')
-		print ''
+		os.execute('arch-chroot /mnt && curl -o /arch.poi.lua https://raw.githubusercontent.com/reineimi/archpoi/main/arch.poi.lua && ln -sf /usr/share/zoneinfo/'..poi.tz..' /etc/localtime && hwclock --systohc && lua /arch.poi.lua')
 	end,
 	n = function() end
 }}
