@@ -163,9 +163,9 @@ log[6] = {'Install Linux?',{
 		out 'pacstrap -K /mnt base linux linux-firmware dosfstools btrfs-progs xfsprogs f2fs-tools ntfs-3g lua'
 		out 'genfstab -U /mnt >> /mnt/etc/fstab'
 		os.execute 'arch-chroot /mnt && lua archpoi.lua'
-		os.exit()
 	end,
 	n = function()
+		os.execute 'arch-chroot /mnt'
 		out 'pacman -S sudo nano curl'
 	end
 }}
@@ -218,7 +218,7 @@ end
 out('curl -LO https://raw.githubusercontent.com/'..github..'/poi.list')
 
 -- (Read file)
-poi.list = io.open('/home/kinoko/Documents/poi.list', 'r')
+poi.list = io.open('poi.list', 'r')
 local list = {}
 for ln in poi.list:lines() do
 	table.insert(list, ln)
@@ -249,7 +249,8 @@ end
 for i = 1,3 do loop() end
 
 -- (Load items)
-os.execute('pacman -S '..table.concat(poi.Packages, ' '))
+os.execute('pacman -S '..table.concat(poi.Packages_Add, ' '))
+os.execute('pacman -Rdd '..table.concat(poi.Packages_Remove, ' '))
 os.execute('systemctl enable '..table.concat(poi.Services_Enable, ' '))
 os.execute('systemctl disable '..table.concat(poi.Services_Disable, ' '))
 

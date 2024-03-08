@@ -1,4 +1,4 @@
-# Packages
+# Packages_Add
 archlinux-keyring
 base-devel
 make
@@ -6,6 +6,9 @@ git
 gnome
 networkmanager
 neofetch
+gnome-terminal
+
+# Packages_Remove
 
 # Services_Enable
 gdm
