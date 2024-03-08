@@ -162,7 +162,7 @@ log[6] = {'Install Linux?',{
 		out 'cp archpoi.lua /mnt'
 		out 'pacstrap -K /mnt base linux linux-firmware dosfstools btrfs-progs xfsprogs f2fs-tools ntfs-3g lua'
 		out 'genfstab -U /mnt >> /mnt/etc/fstab'
-		os.execute 'arch-chroot /mnt'
+		os.execute 'arch-chroot /mnt && lua archpoi.lua'
 		os.exit()
 	end,
 	n = function()
@@ -180,10 +180,9 @@ pout '(Don\'t forget to check the default: en_US.UTF-8)'
 os.execute 'sleep 4 && nano /etc/locale.gen && locale-gen'
 out 'echo "LANG=en_US.UTF-8" >> /etc/locale.conf'
 print ''
-pout [[Great. You can choose between them later in:
-	Settings > Region & Language
-	Settings > Keyboard
-]]
+pout 'Great. You can choose between them later in:'
+print '	Settings > Region & Language'
+print '	Settings > Keyboard\n'
 
 -- Hostname & root password
 log[7] = {'What would you call your computer (hostname)?',{
@@ -206,26 +205,54 @@ out 'grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=
 os.execute 'nano /etc/default/grub && grub-mkconfig -o /boot/grub/grub.cfg'
 print ''
 
--- GNOME and essentials
-pout 'Amazing! Let\'s finish it by installing GNOME and essential packages'
-local packages = {
-	'archlinux-keyring',
-	'base-devel',
-	'make',
-	'git',
-	'gnome',
-	'networkmanager',
-	'neofetch',
-}
-local services = {
-	'gdm',
-	'NetworkManager',
-}
-out('pacman -S '..table.concat(packages, ' '))
-for _, v in ipairs(services) do
-	os.execute('systemctl enable '..v)
+-- Packages and services
+pout 'Amazing! Lastly, let\'s install some packages (Press Enter to use default)'
+pout 'Navigate to desired poi.list at GitHub, format:  user/repo/branch'
+io.write '>> raw.githubusercontent.com/ '
+
+-- (Get file)
+local github = io.read()
+if (github == '') or (not github:match('[a-zA-Z_0-9]+/[a-zA-Z_0-9]+/')) then
+	github = 'reineimi/archpoi/x'
 end
+out('curl -LO https://raw.githubusercontent.com/'..github..'/poi.list')
+
+-- (Read file)
+poi.list = io.open('/home/kinoko/Documents/poi.list', 'r')
+local list = {}
+for ln in poi.list:lines() do
+	table.insert(list, ln)
+end
+poi.list:close()
+
+-- (Parse file)
+local loop = function()
+	local category = ''
+	for i, v in ipairs(list) do
+		if v~='' then
+			if v:match('#') then
+				category = v:match('[a-zA-Z_]+')
+				poi[category] = {}
+			else
+				table.insert(poi[category], v)
+			end
+		else
+			table.remove(list, i)
+			return
+		end
+	end
+
+	for i in ipairs(poi[category]) do
+		table.remove(list, 1)
+	end
+end
+for i = 1,3 do loop() end
+
+-- (Load items)
+os.execute('pacman -S '..table.concat(poi.Packages, ' '))
+os.execute('systemctl enable '..table.concat(poi.Services_Enable, ' '))
+os.execute('systemctl disable '..table.concat(poi.Services_Disable, ' '))
 
 print ''
 pout 'Done! Hope to see you again sometime!\n'
-out('umount /mnt && sleep 2 && reboot')
+os.execute('rm archpoi.lua && rm poi.list && umount -l /mnt && sleep 2 && reboot')
