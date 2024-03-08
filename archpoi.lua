@@ -1,8 +1,9 @@
 -- Automated, lightning-fast installation of Arch Linux on GNOME
 -- With <3 by @reineimi | github.com/reineimi
-local log, poi, ind = {}, {user='root'}, 0
-print 'Version: 1.1.5 \n'
+local log, poi, ind = {}, {user='root', response=true}, 0
+print 'Version: 1.2.0 \n'
 
+-- (Poi output)
 local function pout(...)
 	local data = {...}
 	for _, v in ipairs(data) do
@@ -10,8 +11,21 @@ local function pout(...)
 	end
 end
 
+-- (User output)
+local function uout(default)
+	local answer
+	if poi.response then
+		answer = io.read()
+	end
+	if default and (not answer) or (answer=='') then
+		answer = default
+	end
+	return tostring(answer or '')
+end
+
+-- (Command output)
 local function out(cmd)
-	print('>> '..cmd)
+	print(':: '..cmd)
 	local p = io.popen(cmd)
 	local output = p:read('*a')
 	p:close()
@@ -20,7 +34,8 @@ local function out(cmd)
 	end
 end
 
-local function say(id)
+-- (Dialogue)
+local function say(id, default)
 	pout(log[id][1])
 	local cmd, answers = log[id][2], {}
 
@@ -36,7 +51,7 @@ local function say(id)
 	ind = 0
 
 	io.write(poi.user..' >> ')
-	local a = io.read()
+	local a = uout(default)
 
 	if cmd[a] and (a~=1) and (cmd[a]~='') then
 		if type(cmd[a])=='string' then
@@ -57,24 +72,39 @@ local function say(id)
 	print ''
 end
 
+-- Skip to [poi.list]
+log[1] = {'Hello! Wanna cancel installation and run [poi.list]?',{
+	y = function() poi.skipall=true end,
+	n = 0
+}}
+say(1, 'n')
+
+if not poi.skipall then
+-- Automatic installation
+log[2] = {'Run automatic installation?\n(Could result in error) (Only works when online)',{
+	y = function() poi.response=false end,
+	n = 0
+}}
+say(2, 'n')
+
 -- Command output display
-log[1] = {'Hello! Do you want to see command results?',{
+log[3] = {'Do you want to see command results?',{
 	y = function() poi.cmdout = true end,
 	n = 0
 }}
-say(1)
+say(3, 'y')
 
 -- Username
-log[2] = {'What is your username?',{
+log[4] = {'What is your username?',{
 	function(a)
 		poi.user = a
 		pout('Great! Nice to meet you, '..a..'!')
 	end
 }}
-say(2)
+say(4, 'user')
 
 -- Skip
-log[3] = {'Skip disk formatting and internet connection?\nWrite your disk id (ex: sda) to confirm',{
+log[5] = {'Skip disk formatting and internet connection?\nWrite your disk id (ex: sda) to confirm',{
 	function(a)
 		if a:match('sd') then
 			poi.skip = true
@@ -84,22 +114,23 @@ log[3] = {'Skip disk formatting and internet connection?\nWrite your disk id (ex
 		end
 	end
 }}
-say(3)
+say(5, 'n')
 
 if not poi.skip then
 -- Disk formatting
 pout 'Let\'s finish formatting the disk, fill the data below:'
 io.write 'Disk (for example, sda): '
-local sdx = io.read()
+local sdx = uout('sda')
+poi.sdx = sdx
 io.write 'boot (ex: 1): '
-local pboot = io.read()
+local pboot = uout('1')
 io.write 'root (ex: 2): '
-local proot = io.read()
+local proot = uout('2')
 io.write 'swap (ex: 3; optional): '
-local pswap = io.read()
+local pswap = uout('3')
 io.write 'media (ex: 4; optional): '
-local pmedia = io.read()
-print ''
+local pmedia = uout()
+print '\n'
 
 out(string.format('mkfs.fat -F 32 /dev/%s%s', sdx, pboot))
 out(string.format('mkfs.btrfs -f -L root -n 16k /dev/%s%s', sdx, proot))
@@ -119,34 +150,37 @@ print ''
 
 -- Internet connection
 out 'ping -c 2 archlinux.org'
-log[4] = {'Let\'s check internet connection. Received bytes?',{
+log[6] = {'Let\'s check internet connection. Received bytes?',{
 	y = function()
 		pout 'Seems like we\'re connected!'
 	end,
 	n = function()
 		pout 'Please write down SSID and PWD of your network'
 		io.write 'SSID: '
-		local SSID = io.read()
+		local SSID = uout()
 		io.write 'PWD: '
-		local PWD = io.read()
+		local PWD = uout()
 		print(string.format('iwctl --passphrase %s station wlan0 connect %s', SSID, PWD))
 		io.write('\nReconnect? (y/n)\n'..poi.user..' >> ')
-		local a = io.read()
+		local a = uout('n')
 		if (a=='y') or (a=='') then
 			print ''; log[2][2].n()
 		end
 	end,
 }}
-say(4)
+say(6, 'y')
 
 -- Timezone (pre)
-pout 'Listing timezones in 6s...\n(Use [up/down/pgup/pgdn] to scroll, and [q] to quit)\n'
-os.execute 'sleep 6 && timedatectl list-timezones'
-print ''
+if poi.response then
+	pout 'Listing timezones in 6s...\n(Use [up/down/pgup/pgdn] to scroll, and [q] to quit)\n'
+	os.execute 'sleep 6 && timedatectl list-timezones'
+	print ''
+end
+
 end
 
 -- Timezone
-log[5] = {'What\'s your timezone? Please use Region/City only format',{
+log[7] = {'What\'s your timezone? Please use Region/City only format',{
 	function(a)
 		poi.tz = a
 		if not poi.skip then
@@ -154,10 +188,10 @@ log[5] = {'What\'s your timezone? Please use Region/City only format',{
 		end
 	end
 }}
-say(5)
+say(7, 'America/New_York')
 
 -- Linux installation
-log[6] = {'Install Linux?',{
+log[8] = {'Install Linux?',{
 	y = function(a)
 		pout 'Installing Linux (This will take some time)'
 		pout 'Reopen the script afterwards (lua archpoi.lua)\n'
@@ -171,48 +205,58 @@ log[6] = {'Install Linux?',{
 		out 'pacman -S sudo nano curl'
 	end
 }}
-say(6)
+say(8, 'y')
 
 -- Timezone (post)
 out('ln -sf /usr/share/zoneinfo/'..poi.tz..' /etc/localtime && hwclock --systohc')
 
 -- Locale
-pout 'Done! Now choose preferred locales (delete #, then press Ctrl+S and Ctrl+X)'
-pout '(Don\'t forget to check the default: en_US.UTF-8)'
-os.execute 'sleep 4 && nano /etc/locale.gen && locale-gen'
-out 'echo "LANG=en_US.UTF-8" >> /etc/locale.conf'
+if poi.response then
+	pout 'Done! Now choose preferred locales (delete #, then press Ctrl+S and Ctrl+X)'
+	pout 'Default (en_US.UTF-8) will be added automatically'
+	os.execute 'sleep 4 && nano /etc/locale.gen'
+end
+os.execute 'echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen'
+out 'locale-gen && echo "LANG=en_US.UTF-8" >> /etc/locale.conf'
 print ''
 pout 'Great. You can choose between them later in:'
 print '	Settings > Region & Language'
 print '	Settings > Keyboard\n'
 
 -- Hostname & root password
-log[7] = {'What would you call your computer (hostname)?',{
+log[9] = {'What would you call your computer (hostname)?',{
 	function(a)
 		out('echo "'..a..'" >> /etc/hostname')
-		pout 'Now, create default (root) password:'
-		os.execute 'passwd'
-		pout('And your ('..poi.user..') user password:')
-		os.execute(string.format('groupadd sudo && useradd -m %s && passwd %s && usermod -a -G sudo %s', poi.user, poi.user, poi.user))
+		if poi.response then
+			pout 'Now, create default (root) password:'
+			os.execute 'passwd'
+			pout('And your ('..poi.user..') user password:')
+			os.execute('passwd '..poi.user)
+		end
+		out(string.format('groupadd sudo && useradd -m %s && usermod -a -G sudo %s', poi.user, poi.user))
 	end
 }}
-say(7)
+say(9, 'archlinux')
 
 -- Bootloader
 pout 'Installing GRUB bootloader...'
-log[8] = {'Proceed?',{
+log[10] = {'Proceed?',{
 	y = function()
+		print ''
 		out 'pacman -S grub efibootmgr'
 		out 'mkdir /boot/efi'
 		out 'mount /dev/sda1 /boot/efi'
 		out('grub-install --target=i386-pc /dev/'..poi.sdx)
 		out 'grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB'
-		os.execute 'nano /etc/default/grub && grub-mkconfig -o /boot/grub/grub.cfg'
+		if poi.response then
+			os.execute 'nano /etc/default/grub'
+		end
+		out 'grub-mkconfig -o /boot/grub/grub.cfg'
 	end,
 	n = 0
 }}
-say(8)
-print ''
+say(10, 'y')
+end
 
 -- Packages and services
 pout 'Amazing! Lastly, let\'s install some packages (Press Enter to use default)'
@@ -220,10 +264,7 @@ pout 'Navigate to desired poi.list at GitHub, format:  user/repo/branch'
 io.write '>> raw.githubusercontent.com/ '
 
 -- (Get file)
-local github = io.read()
-if (github == '') or (not github:match('[a-zA-Z_0-9]+/[a-zA-Z_0-9]+/')) then
-	github = 'reineimi/archpoi/x'
-end
+local github = uout('reineimi/archpoi/x')
 out('curl -o /poi.list https://raw.githubusercontent.com/'..github..'/poi.list')
 
 -- (Read file)
@@ -264,5 +305,5 @@ os.execute('systemctl enable '..table.concat(poi.Services_Enable, ' '))
 os.execute('systemctl disable '..table.concat(poi.Services_Disable, ' '))
 
 print ''
-pout 'Done! Hope to see you again sometime!\n'
-os.execute('rm archpoi.lua && rm poi.list && umount -l /mnt && sleep 2 && exit && reboot')
+pout 'Done! Hope to see you again sometime - Poi!\n'
+os.execute('rm archpoi.lua && rm poi.list && umount -l /mnt && sleep 2 && exit && exit && reboot')
