@@ -1,0 +1,14 @@
+# Packages
+archlinux-keyring
+base-devel
+make
+git
+gnome
+networkmanager
+neofetch
+
+# Services_Enable
+gdm
+NetworkManager
+
+# Services_Disable
