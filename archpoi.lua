@@ -1,7 +1,7 @@
 -- Automated, lightning-fast installation of Arch Linux on GNOME
 -- With <3 by @reineimi | github.com/reineimi
 local log, poi, ind = {}, {user='root'}, 0
-print 'Version: 1.1.2 \n'
+print 'Version: 1.1.4 \n'
 
 local function pout(...)
 	local data = {...}
@@ -15,7 +15,7 @@ local function out(cmd)
 	local output = p:read('*a')
 	p:close()
 	if poi.cmdout then
-		print(output)
+		print('>> '..cmd..'\n'..output)
 	end
 end
 
@@ -59,7 +59,7 @@ end
 -- Command output display
 log[1] = {'Hello! Do you want to see command results?',{
 	y = function() poi.cmdout = true end,
-	n = function() poi.cmdout = false end
+	n = 0
 }}
 say(1)
 
@@ -199,11 +199,17 @@ say(7)
 
 -- Bootloader
 pout 'Installing GRUB bootloader...'
-out 'pacman -S grub efibootmgr'
-out 'mkdir /boot/efi'
-out 'mount /dev/sda1 /boot/efi'
-out 'grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB'
-os.execute 'nano /etc/default/grub && grub-mkconfig -o /boot/grub/grub.cfg'
+log[8] = {'Proceed?',{
+	y = function()
+		out 'pacman -S grub efibootmgr'
+		out 'mkdir /boot/efi'
+		out 'mount /dev/sda1 /boot/efi'
+		out 'grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB'
+		os.execute 'nano /etc/default/grub && grub-mkconfig -o /boot/grub/grub.cfg'
+	end,
+	n = 0
+}}
+say(8)
 print ''
 
 -- Packages and services
@@ -247,7 +253,7 @@ local loop = function()
 		table.remove(list, 1)
 	end
 end
-for i = 1,3 do loop() end
+for i = 1,4 do loop() end
 
 -- (Load items)
 os.execute('pacman -S '..table.concat(poi.Packages_Add, ' '))
