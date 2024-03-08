@@ -1,7 +1,7 @@
 -- Automated, lightning-fast installation of Arch Linux on GNOME
 -- With <3 by @reineimi | github.com/reineimi
 local log, poi, ind = {}, {user='root'}, 0
-print 'Version: 1.1.4 \n'
+print 'Version: 1.1.5 \n'
 
 local function pout(...)
 	local data = {...}
@@ -11,11 +11,12 @@ local function pout(...)
 end
 
 local function out(cmd)
+	print('>> '..cmd)
 	local p = io.popen(cmd)
 	local output = p:read('*a')
 	p:close()
 	if poi.cmdout then
-		print('>> '..cmd..'\n'..output)
+		print(output)
 	end
 end
 
@@ -204,6 +205,7 @@ log[8] = {'Proceed?',{
 		out 'pacman -S grub efibootmgr'
 		out 'mkdir /boot/efi'
 		out 'mount /dev/sda1 /boot/efi'
+		out('grub-install --target=i386-pc /dev/'..poi.sdx)
 		out 'grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB'
 		os.execute 'nano /etc/default/grub && grub-mkconfig -o /boot/grub/grub.cfg'
 	end,
@@ -263,4 +265,4 @@ os.execute('systemctl disable '..table.concat(poi.Services_Disable, ' '))
 
 print ''
 pout 'Done! Hope to see you again sometime!\n'
-os.execute('rm archpoi.lua && rm poi.list && umount -l /mnt && sleep 2 && reboot')
+os.execute('rm archpoi.lua && rm poi.list && umount -l /mnt && sleep 2 && exit && reboot')

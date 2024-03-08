@@ -1,10 +1,10 @@
 #!/bin/sh
 echo ''
-printf '=%.0s' {0..32};
+printf '=%.0s' {0..64};
 printf '\nAutomated, lightning-fast installation of Arch Linux on GNOME';
 printf '\nWith <3 by @reineimi | github.com/reineimi \n';
-echo 'Version: 1.1.4';
-printf '=%.0s' {0..32} && printf '\n\n';
+echo 'Version: 1.1.5';
+printf '=%.0s' {0..64} && printf '\n\n';
 
 pacman -Syy;
 #printf '\nInstalling Lua...\n';
