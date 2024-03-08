@@ -1,6 +1,7 @@
 -- Automated, lightning-fast installation of Arch Linux on GNOME
 -- With <3 by @reineimi | github.com/reineimi
 local log, poi, ind = {}, {user='root'}, 0
+print 'Version: 1.1.2 \n'
 
 local function pout(...)
 	local data = {...}
@@ -215,10 +216,10 @@ local github = io.read()
 if (github == '') or (not github:match('[a-zA-Z_0-9]+/[a-zA-Z_0-9]+/')) then
 	github = 'reineimi/archpoi/x'
 end
-out('curl -LO https://raw.githubusercontent.com/'..github..'/poi.list')
+out('curl -o /poi.list https://raw.githubusercontent.com/'..github..'/poi.list')
 
 -- (Read file)
-poi.list = io.open('poi.list', 'r')
+poi.list = io.open('/poi.list', 'r')
 local list = {}
 for ln in poi.list:lines() do
 	table.insert(list, ln)
