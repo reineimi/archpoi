@@ -3,12 +3,22 @@ archlinux-keyring
 base-devel
 make
 git
-gnome
 networkmanager
+ffmpeg
 neofetch
+hwinfo
+gnome
 gnome-terminal
+gnome-browser-connector
+geary
+file-roller
+gnome-tweaks
+qt5ct
+systemd-ui
+transmission-gtk
 
 # Packages_Remove
+gnome-software
 
 # Services_Enable
 gdm

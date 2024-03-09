@@ -1,0 +1,17 @@
+#!/bin/sh
+rm -f .bashrc;
+curl -LO https://raw.githubusercontent.com/reineimi/arch/x/.bashrc;
+
+packages=(
+	vivaldi
+	wireshark
+	spotify
+	obs-studio
+	telegram-desktop
+	discord
+	virtualbox
+	virtualbox-host-modules-arch
+);
+sudo pacman -S "${packages[@]}";
+
+rm -f poi.eimi;
