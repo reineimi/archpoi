@@ -1,7 +1,7 @@
 -- Automated, lightning-fast installation of Arch Linux on GNOME
 -- With <3 by @reineimi | github.com/reineimi
 local log, poi, ind = {}, {user='root', response=true}, 0
-print 'Version: 1.2.4 \n'
+print 'Version: 1.2.5 \n'
 
 -- (Poi output)
 local function pout(...)
@@ -19,7 +19,7 @@ local function uout(default)
 	end
 	if default and (not answer) or (answer=='') then
 		answer = default
-		print('('..answer..')')
+		print('('..(answer or '')..')')
 	end
 	return tostring(answer or '')
 end
