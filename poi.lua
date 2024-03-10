@@ -34,7 +34,7 @@ local function out(cmd)
 		print(output)
 	end
 end
-out=print; os.execute=print
+--out=print; os.execute=print
 
 -- (Dialogue)
 local function say(id, default)
