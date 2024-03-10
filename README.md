@@ -16,16 +16,16 @@ The format of the link is: `user/repo/branch`.<br>
 The format of the `poi.list` must also follow a strict pattern, including empty lines (see current [poi.list](https://github.com/reineimi/archpoi/blob/x/poi.list)):
 ```
 # Packages_Add
-<package to add, one per line>
+<package to add, one per line or using whitespace>
 
 # Packages_Remove
-<package to remove, one per line>
+<package to remove, same rule>
 
 # Services_Enable
-<service to enable, one per line>
+<service to enable, same rule>
 
 # Services_Disable
-<service to disable, one per line>
+<service to disable, same rule>
 ```
 <hr>
 
@@ -46,7 +46,7 @@ The format of the `poi.list` must also follow a strict pattern, including empty 
 > Same as `poi.extra`, but containing packages I use. Perhaps you'd wanna use them too, who knows?
 
 - `sh` .bashrc
-> Not listed here but will be included. This  a [bash](https://en.wikipedia.org/wiki/Bash_(Unix_shell)) profile. It contians useful command shortcuts you might wanna use often. You can view it [here](https://github.com/reineimi/arch/blob/x/.bashrc).
+> Not listed here but will be included. This  a [bash](https://en.wikipedia.org/wiki/Bash_(Unix_shell)) profile. It contians handy command shortcuts you might wanna use often. You can view it [here](https://github.com/reineimi/arch/blob/x/.bashrc).
 <hr>
 
 # GNOME?
