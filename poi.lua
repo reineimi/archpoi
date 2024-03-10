@@ -1,7 +1,7 @@
 -- Automated, lightning-fast installation of Arch Linux on GNOME
 -- With <3 by @reineimi | github.com/reineimi
 local log, poi, ind = {}, {user='root', response=true}, 0
-print 'Version: 1.2.5 \n'
+print 'Version: 1.2.6 \n'
 
 -- (Poi output)
 local function pout(...)
@@ -105,35 +105,33 @@ log[4] = {'What is your username?',{
 }}
 say(4, 'user')
 
+-- Disk selection
+pout 'Let\'s finish formatting the disk, fill the data below:'
+io.write 'Disk (for example, sda): '
+local sdx = uout('sda')
+io.write 'boot (default: 1): '
+local pboot = uout('1')
+io.write 'root (default: 2): '
+local proot = uout('2')
+io.write 'swap (optional): '
+local pswap = uout()
+io.write 'media (optional): '
+local pmedia = uout()
+print '\n'
+
 -- Skip
-log[5] = {'Skip disk formatting and internet connection?\nWrite your disk id (ex: sda) to confirm',{
-	function(a)
-		if a:match('sd') then
-			poi.skip = true
-			poi.sdx = a
-			out('mount /dev/'..poi.sdx..'2 /mnt')
-			out('mount --mkdir /dev/'..poi.sdx..'1 /mnt/boot')
-		end
+log[5] = {'Skip disk formatting and internet connection?',{
+	n = 0,
+	y = function()
+		poi.skip = true
+		out('mount /dev/'..sdx..'2 /mnt')
+		out('mount --mkdir /dev/'..sdx..'1 /mnt/boot')
 	end
 }}
 say(5, 'n')
 
 if not poi.skip then
 -- Disk formatting
-pout 'Let\'s finish formatting the disk, fill the data below:'
-io.write 'Disk (for example, sda): '
-local sdx = uout('sda')
-poi.sdx = sdx
-io.write 'boot (ex: 1): '
-local pboot = uout('1')
-io.write 'root (ex: 2): '
-local proot = uout('2')
-io.write 'swap (ex: 3; optional): '
-local pswap = uout()
-io.write 'media (ex: 4; optional): '
-local pmedia = uout()
-print '\n'
-
 out(string.format('mkfs.fat -F 32 /dev/%s%s', sdx, pboot))
 out(string.format('mkfs.btrfs -f -L root /dev/%s%s', sdx, proot))
 
@@ -229,13 +227,13 @@ print '	Settings > Keyboard\n'
 log[9] = {'What would you call your computer (hostname)?',{
 	function(a)
 		out('echo "'..a..'" >> /etc/hostname')
+		out('useradd -m '..poi.user)
 		if poi.response then
 			pout 'Now, create default (root) password:'
 			os.execute 'passwd'
 			pout('And your ('..poi.user..') user password:')
 			os.execute('passwd '..poi.user)
 		end
-		out('useradd -m '..poi.user)
 		out('echo "'..poi.user..' ALL=(ALL:ALL) ALL" >> /etc/sudoers')
 	end
 }}
@@ -248,8 +246,8 @@ log[10] = {'Proceed?',{
 		print ''
 		out 'pacman -S grub efibootmgr'
 		out 'mkdir /boot/efi'
-		out 'mount /dev/sda1 /boot/efi'
-		out('grub-install --target=i386-pc /dev/'..poi.sdx)
+		out('mount /dev/'..sdx..pboot..' /boot/efi')
+		out('grub-install --target=i386-pc /dev/'..sdx)
 		out 'grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB'
 		if poi.response then
 			os.execute 'nano /etc/default/grub'
@@ -308,8 +306,9 @@ for i = 1,4 do loop() end
 -- (Load items)
 os.execute('pacman -S '..table.concat(poi.Packages_Add, ' '))
 os.execute('pacman -Rdd '..table.concat(poi.Packages_Remove, ' '))
-os.execute('systemctl enable '..table.concat(poi.Services_Enable, ' '))
-os.execute('systemctl disable '..table.concat(poi.Services_Disable, ' '))
+out('systemctl enable '..table.concat(poi.Services_Enable, ' '))
+out('systemctl disable '..table.concat(poi.Services_Disable, ' '))
+out 'export QT_QPA_PLATFORMTHEME="qt5ct"'
 
 print ''
 pout 'Done! You can run "sh poi.extra" and "sh poi.eimi" for extra setups after reboot\n'
