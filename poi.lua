@@ -1,7 +1,8 @@
 -- Automated, lightning-fast installation of Arch Linux on GNOME
 -- With <3 by @reineimi | github.com/reineimi
 local log, poi, ind = {}, {user='root', response=true}, 0
-print 'Version: 1.2.6 \n'
+print 'Version: 1.2.7 \n'
+local q = function() os.exit() end
 
 -- (Poi output)
 local function pout(...)
@@ -34,7 +35,7 @@ local function out(cmd)
 		print(output)
 	end
 end
---out=print; os.execute=print
+out=print; os.execute=print
 
 -- (Dialogue)
 local function say(id, default)
@@ -77,7 +78,8 @@ end
 -- Skip to [poi.list]
 log[1] = {'Hello! Wanna cancel installation and run [poi.list]?',{
 	y = function() poi.skipall=true end,
-	n = 0
+	n = 0,
+	q = q
 }}
 say(1, 'n')
 
@@ -85,14 +87,16 @@ if not poi.skipall then
 -- Automatic installation
 log[2] = {'Run automatic installation?\n(Could result in error) (Only works when online)',{
 	y = function() poi.response=false end,
-	n = 0
+	n = 0,
+	q = q
 }}
 say(2, 'n')
 
 -- Command output display
 log[3] = {'Do you want to see command results?',{
 	y = function() poi.cmdout = true end,
-	n = 0
+	n = 0,
+	q = q
 }}
 say(3, 'y')
 
@@ -121,12 +125,13 @@ print '\n'
 
 -- Skip
 log[5] = {'Skip disk formatting and internet connection?',{
-	n = 0,
 	y = function()
 		poi.skip = true
 		out('mount /dev/'..sdx..'2 /mnt')
 		out('mount --mkdir /dev/'..sdx..'1 /mnt/boot')
-	end
+	end,
+	n = 0,
+	q = q
 }}
 say(5, 'n')
 
@@ -167,6 +172,7 @@ log[6] = {'Let\'s check internet connection. Received bytes?',{
 			print ''; log[2][2].n()
 		end
 	end,
+	q = q
 }}
 say(6, 'y')
 
@@ -203,7 +209,8 @@ log[8] = {'Install Linux? (Skip if already did)',{
 	n = function()
 		os.execute 'arch-chroot /mnt'
 		out 'pacman -S sudo nano curl'
-	end
+	end,
+	q = q
 }}
 say(8, 'y')
 
@@ -254,7 +261,8 @@ log[10] = {'Proceed?',{
 		end
 		out 'grub-mkconfig -o /boot/grub/grub.cfg'
 	end,
-	n = 0
+	n = 0,
+	q = q
 }}
 say(10, 'y')
 end

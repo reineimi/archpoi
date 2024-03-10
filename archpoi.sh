@@ -3,7 +3,7 @@ echo '';
 printf '=%.0s' {0..64};
 printf '\nAutomated, lightning-fast installation of Arch Linux on GNOME';
 printf '\nWith <3 by @reineimi | github.com/reineimi \n';
-echo 'Version: 1.2.6';
+echo 'Version: 1.2.7';
 printf '=%.0s' {0..64} && printf '\n\n';
 
 pacman -Syy;
