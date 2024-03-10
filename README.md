@@ -13,7 +13,7 @@ curl -LO raw.githubusercontent.com/reineimi/archpoi/x/archpoi.sh; sh archpoi.sh
 During installation, you'll be able to select a custom `poi.list`.<br>
 All you need is to navigate it to a repository which contains a `poi.list` in it.<br>
 The format of the link is: `user/repo/branch`.<br>
-The format of the `poi.list` must also follow a strict pattern, including empty lines (see current `poi.list`):
+The format of the `poi.list` must also follow a strict pattern, including empty lines (see current [poi.list](https://github.com/reineimi/archpoi/blob/x/poi.list)):
 ```
 # Packages_Add
 <package to add, one per line>
@@ -48,17 +48,17 @@ The format of the `poi.list` must also follow a strict pattern, including empty 
 <hr>
 
 # GNOME?
-GNOME is a Desktop Environment and Window Management software.
+[GNOME](https://www.gnome.org/) is a Desktop Environment and Window Management software.
 
 ### Why prefer it over others?
 It's well-refined, not particularly heavy, stable, user-friendly, minimalistic and compatible.
 <hr>
 
 ## Lua?
-I haven't really looked into bash that much yet. Also, this is a matter of preferences.
+I haven't really looked into bash that much yet. But also, I just love [Lua](https://www.lua.org/about.html).
 
 ## Arch?
 I use [Arch](https://archlinux.org/) btw. Now you do too.
 
 ## Poi?
-**Poi.**
+![(Poi.)](https://media1.tenor.com/m/z89eTLYza68AAAAd/yuudachi-poi.gif)
