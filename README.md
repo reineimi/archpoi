@@ -26,7 +26,6 @@ The format of the `poi.list` must also follow a strict pattern, including empty 
 
 # Services_Disable
 <service to disable, one per line>
-
 ```
 <hr>
 
@@ -44,7 +43,10 @@ The format of the `poi.list` must also follow a strict pattern, including empty 
 > Optional post-installation script that will be put in `/home/<user>/`.
 
 - `.sh` poi.eimi
-> Same as `poi.extra` but containing packages I use. Perhaps you'd wanna use them too, who knows?
+> Same as `poi.extra`, but containing packages I use. Perhaps you'd wanna use them too, who knows?
+
+- `sh` .bashrc
+> Not listed here but will be included. This  a [bash](https://en.wikipedia.org/wiki/Bash_(Unix_shell)) profile. It contians useful command shortcuts you might wanna use often. You can view it [here](https://github.com/reineimi/arch/blob/x/.bashrc).
 <hr>
 
 # GNOME?
@@ -55,7 +57,8 @@ It's well-refined, not particularly heavy, stable, user-friendly, minimalistic a
 <hr>
 
 ## Lua?
-I haven't really looked into bash that much yet. But also, I just love [Lua](https://www.lua.org/about.html).
+I haven't really looked into bash that much yet.<br>
+But also, I just love [Lua](https://www.lua.org/about.html).
 
 ## Arch?
 I use [Arch](https://archlinux.org/) btw. Now you do too.
