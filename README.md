@@ -45,7 +45,7 @@ The format of the `poi.list` must also follow a strict pattern, including empty 
 - `.sh` poi.eimi
 > Same as `poi.extra`, but containing packages I use. Perhaps you'd wanna use them too, who knows?
 
-- `sh` .bashrc
+- `.sh` .bashrc
 > Not listed here but will be included. This  a [bash](https://en.wikipedia.org/wiki/Bash_(Unix_shell)) profile. It contians handy command shortcuts you might wanna use often. You can view it [here](https://github.com/reineimi/arch/blob/x/.bashrc).
 <hr>
 
