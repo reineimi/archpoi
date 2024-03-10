@@ -1,6 +1,4 @@
 #!/bin/sh
-rm -f .bashrc;
-curl -LO https://raw.githubusercontent.com/reineimi/arch/x/.bashrc;
 
 packages=(
 	vivaldi

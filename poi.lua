@@ -1,7 +1,7 @@
 -- Automated, lightning-fast installation of Arch Linux on GNOME
 -- With <3 by @reineimi | github.com/reineimi
 local log, poi, ind = {}, {user='root', response=true}, 0
-print 'Version: 1.2.2 \n'
+print 'Version: 1.2.3 \n'
 
 -- (Poi output)
 local function pout(...)
@@ -270,7 +270,7 @@ local raw = 'https://raw.githubusercontent.com/'
 out('curl -o /poi.list '..raw..github..'/poi.list')
 out('curl -o /home/'..poi.user..'/poi.extra '..raw..'reineimi/archpoi/x/poi.extra')
 out('curl -o /home/'..poi.user..'/poi.eimi '..raw..'reineimi/archpoi/x/poi.eimi')
-out('curl -o /home/'..poi.user..'/.bashrc '..raw..'reineimi/arch/x/.bashrc')
+out(string.format('curl %sreineimi/arch/x/.bashrc > /home/%s/.bashrc', raw, poi.user))
 
 -- (Read file)
 poi.list = io.open('/poi.list', 'r')
