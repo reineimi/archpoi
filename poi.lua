@@ -1,7 +1,7 @@
 -- Automated, lightning-fast installation of Arch Linux on GNOME
 -- With <3 by @reineimi | github.com/reineimi
 local log, poi, ind = {}, {user='root', response=true}, 0
-print 'Version: 1.2.3 \n'
+print 'Version: 1.2.4 \n'
 
 -- (Poi output)
 local function pout(...)
@@ -19,6 +19,7 @@ local function uout(default)
 	end
 	if default and (not answer) or (answer=='') then
 		answer = default
+		print('('..answer..')')
 	end
 	return tostring(answer or '')
 end
@@ -33,6 +34,7 @@ local function out(cmd)
 		print(output)
 	end
 end
+out=print; os.execute=print
 
 -- (Dialogue)
 local function say(id, default)
@@ -127,7 +129,7 @@ local pboot = uout('1')
 io.write 'root (ex: 2): '
 local proot = uout('2')
 io.write 'swap (ex: 3; optional): '
-local pswap = uout('3')
+local pswap = uout()
 io.write 'media (ex: 4; optional): '
 local pmedia = uout()
 print '\n'
@@ -270,7 +272,7 @@ local raw = 'https://raw.githubusercontent.com/'
 out('curl -o /poi.list '..raw..github..'/poi.list')
 out('curl -o /home/'..poi.user..'/poi.extra '..raw..'reineimi/archpoi/x/poi.extra')
 out('curl -o /home/'..poi.user..'/poi.eimi '..raw..'reineimi/archpoi/x/poi.eimi')
-out(string.format('curl %sreineimi/arch/x/.bashrc > /home/%s/.bashrc', raw, poi.user))
+out(string.format('curl -L %sreineimi/arch/x/.bashrc > /home/%s/.bashrc', raw, poi.user))
 
 -- (Read file)
 poi.list = io.open('/poi.list', 'r')
