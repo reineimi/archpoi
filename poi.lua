@@ -290,7 +290,7 @@ local raw = 'https://raw.githubusercontent.com/'
 out('curl -o /poi.list '..raw..github..'/poi.list')
 
 -- (Read file)
-poi.list = io.open('/home/kinoko/Documents/archpoi/poi.list', 'r')
+poi.list = io.open('/poi.list', 'r')
 local list = {}
 for ln in poi.list:lines() do
 	table.insert(list, ln)
