@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# PACKAGE LISTS
 packages=(
 	vivaldi
 	wireshark
@@ -10,6 +11,28 @@ packages=(
 	virtualbox
 	virtualbox-host-modules-arch
 );
-sudo pacman -S "${packages[@]}";
+aur_packages=(
+	bibata-cursor-theme
+	adwaita-qt-git
+	qimgv
+);
 
-rm -f poi.eimi;
+# AUR HANDLER
+aur() {
+	mkdir tempgit && cd tempgit;
+	git clone https://aur.archlinux.org/$1.git;
+	cd $1 && makepkg -si;
+	cd && rm -rf tempgit;
+}
+
+# PACKAGE INSTALLATION
+sudo pacman -S "${packages[@]}";
+for i in ${aur_packages[@]}; do
+	aur $i
+done;
+
+# CONFIGURATIONS
+curl https://raw.githubusercontent.com/zb3/gnome-gamma-tool/main/gnome-gamma-tool.py > ~/Documents/ggamma.py;
+~/Documents/ggamma.py -g 0.85:0.83:0.84 -t 6100 -c 1.07;
+
+sudo rm -f poi.eimi;

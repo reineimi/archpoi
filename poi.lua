@@ -1,12 +1,18 @@
 -- Automated, lightning-fast installation of Arch Linux on GNOME
 -- With <3 by @reineimi | github.com/reineimi
-local log, poi, ind = {}, {user='root', response=true}, 0
-print 'Version: 1.2.7 \n'
+local link = 'https://github.com/reineimi/archpoi'
+print('arch.poi | Version: 1.3.0 | '..link)
+local ind, log, poi = 0, {}, {
+	user = 'root',
+	response = true,
+	debug = 0
+}
 local q = function() os.exit() end
 
 -- (Poi output)
 local function pout(...)
 	local data = {...}
+	print(string.rep('-', 64))
 	for _, v in ipairs(data) do
 		print('Poi << '..v)
 	end
@@ -22,12 +28,15 @@ local function uout(default)
 		answer = default
 		print('('..(answer or '')..')')
 	end
+	print(string.rep('-', 64))
 	return tostring(answer or '')
 end
 
 -- (Command output)
 local function out(cmd)
-	print(':: '..cmd)
+	if poi.cmdout then
+		print(':: '..cmd)
+	end
 	local p = io.popen(cmd)
 	local output = p:read('*a')
 	p:close()
@@ -35,7 +44,6 @@ local function out(cmd)
 		print(output)
 	end
 end
---out=print; os.execute=print
 
 -- (Dialogue)
 local function say(id, default)
@@ -66,52 +74,48 @@ local function say(id, default)
 		elseif type(cmd[a])=='function' then
 			cmd[a]()
 		end
-	elseif cmd[1] and (a~='') then
+	elseif cmd[1] then
 		cmd[1](a)
 	else
 		say(id)
 	end
-
-	print ''
 end
 
--- Skip to [poi.list]
-log[1] = {'Hello! Wanna cancel installation and run [poi.list]?',{
-	y = function() poi.skipall=true end,
-	n = 0,
-	q = q
-}}
-say(1, 'n')
-
-if not poi.skipall then
--- Automatic installation
-log[2] = {'Run automatic installation?\n(Could result in error) (Only works when online)',{
-	y = function() poi.response=false end,
-	n = 0,
-	q = q
-}}
-say(2, 'n')
+if poi.debug==1 then
+	out=print; os.execute=print
+end
 
 -- Command output display
-log[3] = {'Do you want to see command results?',{
+log[1] = {'Hello! Do you want to see command results?',{
 	y = function() poi.cmdout = true end,
 	n = 0,
 	q = q
 }}
-say(3, 'y')
+say(1, 'y')
 
 -- Username
-log[4] = {'What is your username?',{
+log[2] = {'What is your username? (default: root)',{
 	function(a)
-		poi.user = a
-		pout('Great! Nice to meet you, '..a..'!')
+		if a and (a~='') then
+			poi.user = a
+			pout('Great! Nice to meet you, '..a..'!')
+		end
 	end
 }}
-say(4, 'user')
+say(2)
 
+-- Skip to [poi.list]
+log[3] = {'Wanna cancel installation and run [poi.list]?',{
+	y = function() poi.skipall=true end,
+	n = 0,
+	q = q
+}}
+say(3, 'n')
+
+if not poi.skipall then
 -- Disk selection
-pout 'Let\'s finish formatting the disk, fill the data below:'
-io.write 'Disk (for example, sda): '
+pout 'Please choose your disk ID and partition numbers'
+io.write 'Disk (default: sda): '
 local sdx = uout('sda')
 io.write 'boot (default: 1): '
 local pboot = uout('1')
@@ -121,7 +125,14 @@ io.write 'swap (optional): '
 local pswap = uout()
 io.write 'media (optional): '
 local pmedia = uout()
-print '\n'
+
+-- Automatic installation
+log[4] = {'Run automatic installation?\n(Only works when online)',{
+	y = function() poi.response=false end,
+	n = 0,
+	q = q
+}}
+say(4, 'n')
 
 -- Skip
 log[5] = {'Skip disk formatting and internet connection?',{
@@ -151,7 +162,6 @@ if pmedia~='' then
 	out(string.format('mkfs.btrfs -L media -n 16k /dev/%s%s', sdx, pmedia))
 	out(string.format('mount --mkdir /dev/%s%s /mnt/media', sdx, pmedia))
 end
-print ''
 
 -- Internet connection
 out 'ping -c 2 archlinux.org'
@@ -169,7 +179,7 @@ log[6] = {'Let\'s check internet connection. Received bytes?',{
 		io.write('\nReconnect? (y/n)\n'..poi.user..' >> ')
 		local a = uout('n')
 		if (a=='y') or (a=='') then
-			print ''; log[2][2].n()
+			log[2][2].n()
 		end
 	end,
 	q = q
@@ -180,7 +190,6 @@ say(6, 'y')
 if poi.response then
 	pout 'Listing timezones in 6s...\n(Use [up/down/pgup/pgdn] to scroll, and [q] to quit)\n'
 	os.execute 'sleep 6 && timedatectl list-timezones'
-	print ''
 end
 
 end
@@ -225,10 +234,9 @@ if poi.response then
 end
 os.execute 'echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen'
 out 'locale-gen && echo "LANG=en_US.UTF-8" >> /etc/locale.conf'
-print ''
 pout 'Great. You can choose between them later in:'
 print '	Settings > Region & Language'
-print '	Settings > Keyboard\n'
+print '	Settings > Keyboard'
 
 -- Hostname, user, password
 log[9] = {'What would you call your computer (hostname)?',{
@@ -250,7 +258,6 @@ say(9, 'archlinux')
 pout 'Installing GRUB bootloader...'
 log[10] = {'Proceed?',{
 	y = function()
-		print ''
 		out 'pacman -S grub efibootmgr'
 		out 'mkdir /boot/efi'
 		out('mount /dev/'..sdx..pboot..' /boot/efi')
@@ -268,20 +275,19 @@ say(10, 'y')
 end
 
 -- Packages and services
-pout 'Amazing! Lastly, let\'s install some packages (Press Enter to use default)'
-pout 'Navigate to desired poi.list at GitHub, format:  user/repo/branch'
+pout('Amazing! Lastly, let\'s install some packages',
+	'Navigate to desired poi.list at GitHub',
+	'Format:  user/repo/branch',
+	'(Press Enter to use default)')
 io.write '>> raw.githubusercontent.com/ '
 
 -- (Get file)
 local github = uout('reineimi/archpoi/x')
 local raw = 'https://raw.githubusercontent.com/'
 out('curl -o /poi.list '..raw..github..'/poi.list')
-out('curl -o /home/'..poi.user..'/poi.extra '..raw..'reineimi/archpoi/x/poi.extra')
-out('curl -o /home/'..poi.user..'/poi.eimi '..raw..'reineimi/archpoi/x/poi.eimi')
-out(string.format('curl -L %sreineimi/arch/x/.bashrc > /home/%s/.bashrc', raw, poi.user))
 
 -- (Read file)
-poi.list = io.open('/poi.list', 'r')
+poi.list = io.open('/home/kinoko/Documents/archpoi/poi.list', 'r')
 local list = {}
 for ln in poi.list:lines() do
 	table.insert(list, ln)
@@ -318,7 +324,20 @@ out('systemctl enable '..table.concat(poi.Services_Enable, ' '))
 out('systemctl disable '..table.concat(poi.Services_Disable, ' '))
 out 'export QT_QPA_PLATFORMTHEME="qt5ct"'
 
-print ''
-pout 'Done! You can run "sh poi.extra" and "sh poi.eimi" for extra setups after reboot\n'
-print 'Write "reboot" to reboot (possibly need to write "exit" first)'
+-- Extra
+log[11] = {'Wanna install [poi.extra] from '..github..'?', {
+	y = function()
+		out(string.format('curl -L %sreineimi/arch/x/.bashrc > /home/%s/.bashrc', raw, poi.user))
+		out('curl -o /home/'..poi.user..'/poi.eimi '..raw..'reineimi/archpoi/x/poi.eimi')
+		out('curl -o /poi.extra '..raw..github..'/poi.extra')
+		out 'sh poi.extra && rm poi.extra'
+		pout 'Run "sh poi.eimi" after booting into system'
+		print '	in case you wanna install additional packages'
+	end,
+	n = 0
+}}
+say(11, 'n')
+
+pout('Done! Have a good time!', 'You can find me at: '..link)
+print '\n[i] Write "reboot" to reboot (possibly need to write "exit" first)\n'
 os.execute('sleep 2; rm poi.lua; rm poi.list; umount -l /mnt; exit; systemctl poweroff')

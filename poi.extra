@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "Poi >> Good to see you again! Let's finish configuration";
+printf "Poi >> Let's apply extra configurations!\n";
 
 sudo pacman -Syy;
 
@@ -9,9 +9,10 @@ sh install.sh;
 cd && rm -rf "Reversal-icon-theme";
 gsettings set org.gnome.desktop.interface icon-theme "Reversal";
 
-git clone https://aur.archlinux.org/qimgv.git;
-cd qimgv && makepkg -si;
-cd && rm -rf qimgv;
+packages=(
+	noto-fonts-cjk
+);
+pacman -S "${packages[@]}";
 
-printf '\nHave a good time!\n(https://github.com/reineimi/archpoi)\n'
+printf '\nPoi >> Have a good day!\n(https://github.com/reineimi/archpoi)\n'
 rm -f poi.extra;

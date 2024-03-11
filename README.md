@@ -30,23 +30,23 @@ The format of the `poi.list` must also follow a strict pattern, including empty 
 <hr>
 
 # Scripts
-- `.sh` archpoi.sh
+`.sh` archpoi.sh
 > Initial, introductory script, which also loads `poi.lua`.
 
-- `.lua` poi.lua
+`.lua` poi.lua
 > Main installation logic.
 
-- `raw` poi.list
+`raw` poi.list
 > A text file containing packages and services.
 
-- `.sh` poi.extra
-> Optional post-installation script that will be put in `/home/<user>/`.
+`.sh` poi.extra
+> Optional post-installation script that will be taken from the same repo as `poi.list`.
 
-- `.sh` poi.eimi
-> Same as `poi.extra`, but containing packages I use. Perhaps you'd wanna use them too, who knows?
+`.sh` poi.eimi
+> Optional script that will be put in `/home/<user>/` if the installation of `poi.extra` proceeded.
 
-- `.sh` .bashrc
-> Not listed here but will be included. This  a [bash](https://en.wikipedia.org/wiki/Bash_(Unix_shell)) profile. It contians handy command shortcuts you might wanna use often. You can view it [here](https://github.com/reineimi/arch/blob/x/.bashrc).
+`.sh` .bashrc
+> Not listed here but will be included alongside `poi.extra`. This is a [bash](https://en.wikipedia.org/wiki/Bash_(Unix_shell)) profile. It contians handy command shortcuts. You can view it [here](https://github.com/reineimi/arch/blob/x/.bashrc).
 <hr>
 
 # GNOME?
