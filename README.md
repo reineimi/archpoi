@@ -40,13 +40,13 @@ The format of the `poi.list` must also follow a strict pattern, including empty 
 > A text file containing packages and services.
 
 `.sh` poi.extra
-> Optional post-installation script that will be taken from the same repo as `poi.list`.
+> Optional post-installation script that will be taken from the same repo as `poi.list`. You will find it at `/home/<user>/`.
 
 `.sh` poi.eimi
-> Optional script that will be put in `/home/<user>/` if the installation of `poi.extra` proceeded.
+> Same as `poi.extra` but with stuff I use personally. Check if you need it or run `sudo rm poi.eimi`.
 
 `.sh` .bashrc
-> Not listed here but will be included alongside `poi.extra`. This is a [bash](https://en.wikipedia.org/wiki/Bash_(Unix_shell)) profile. It contians handy command shortcuts. You can view it [here](https://github.com/reineimi/arch/blob/x/.bashrc).
+> Will be included alongside `poi.extra`. This is a [bash](https://en.wikipedia.org/wiki/Bash_(Unix_shell)) profile. It contians handy command shortcuts. You can view it [here](https://github.com/reineimi/arch/blob/x/.bashrc).
 <hr>
 
 # GNOME?

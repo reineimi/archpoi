@@ -1,7 +1,7 @@
 -- Automated, lightning-fast installation of Arch Linux on GNOME
 -- With <3 by @reineimi | github.com/reineimi
 local link = 'https://github.com/reineimi/archpoi'
-print('arch.poi | Version: 1.3.0 | '..link)
+print('arch.poi | Version: 1.3.1 | '..link)
 local ind, log, poi = 0, {}, {
 	user = 'root',
 	response = true,
@@ -10,11 +10,11 @@ local ind, log, poi = 0, {}, {
 local q = function() os.exit() end
 
 -- (Poi output)
-local function pout(...)
+local function pout(str, ...)
 	local data = {...}
-	print(string.rep('-', 64))
+	print(string.rep('-', 64)..'\nPoi << '..str)
 	for _, v in ipairs(data) do
-		print('Poi << '..v)
+		print('       '..v)
 	end
 end
 
@@ -81,17 +81,18 @@ local function say(id, default)
 	end
 end
 
-if poi.debug==1 then
-	out=print; os.execute=print
-end
-
 -- Command output display
 log[1] = {'Hello! Do you want to see command results?',{
 	y = function() poi.cmdout = true end,
 	n = 0,
-	q = q
+	q = q,
+	debug = function() poi.debug = 1 end
 }}
 say(1, 'y')
+
+if poi.debug==1 then
+	out=print; os.execute=print
+end
 
 -- Username
 log[2] = {'What is your username? (default: root)',{
@@ -127,7 +128,7 @@ io.write 'media (optional): '
 local pmedia = uout()
 
 -- Automatic installation
-log[4] = {'Run automatic installation?\n(Only works when online)',{
+log[4] = {'Run automatic installation?\n	(Only works when online)',{
 	y = function() poi.response=false end,
 	n = 0,
 	q = q
@@ -175,11 +176,11 @@ log[6] = {'Let\'s check internet connection. Received bytes?',{
 		local SSID = uout()
 		io.write 'PWD: '
 		local PWD = uout()
-		print(string.format('iwctl --passphrase %s station wlan0 connect %s', SSID, PWD))
+		os.execute('iwctl --passphrase %s station wlan0 connect %s', SSID, PWD)
 		io.write('\nReconnect? (y/n)\n'..poi.user..' >> ')
 		local a = uout('n')
 		if (a=='y') or (a=='') then
-			log[2][2].n()
+			log[6][2].n()
 		end
 	end,
 	q = q
@@ -188,14 +189,15 @@ say(6, 'y')
 
 -- Timezone (pre)
 if poi.response then
-	pout 'Listing timezones in 6s...\n(Use [up/down/pgup/pgdn] to scroll, and [q] to quit)\n'
+	pout('Listing timezones in 6s...',
+	'(Use [up/down/pgup/pgdn] to scroll, and [q] to quit)\n')
 	os.execute 'sleep 6 && timedatectl list-timezones'
 end
 
 end
 
 -- Timezone
-log[7] = {'What\'s your timezone? Please use Region/City only format',{
+log[7] = {'What\'s your timezone? Please use Region/City format only',{
 	function(a)
 		poi.tz = a
 		if not poi.skip then
@@ -208,8 +210,8 @@ say(7, 'America/New_York')
 -- Linux installation
 log[8] = {'Install Linux? (Skip if already did)',{
 	y = function(a)
-		pout 'Installing Linux (This will take some time)'
-		pout 'Reopen the script afterwards (lua poi.lua)\n'
+		pout('Installing Linux (This will take some time);',
+		'Reopen the script afterwards (lua poi.lua)\n')
 		out 'cp poi.lua /mnt'
 		out 'pacstrap -K /mnt base linux linux-firmware dosfstools btrfs-progs xfsprogs f2fs-tools ntfs-3g lua'
 		out 'genfstab -U /mnt >> /mnt/etc/fstab'
@@ -228,15 +230,16 @@ out('ln -sf /usr/share/zoneinfo/'..poi.tz..' /etc/localtime && hwclock --systohc
 
 -- Locale
 if poi.response then
-	pout 'Done! Now choose preferred locales (delete #, then press Ctrl+S and Ctrl+X)'
-	pout 'Default (en_US.UTF-8) will be added automatically'
+	pout('Done! Now choose preferred locales',
+	'(delete #, then press Ctrl+S and Ctrl+X);',
+	'Default (en_US.UTF-8) will be added automatically\n')
 	os.execute 'sleep 4 && nano /etc/locale.gen'
 end
 os.execute 'echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen'
 out 'locale-gen && echo "LANG=en_US.UTF-8" >> /etc/locale.conf'
-pout 'Great. You can choose between them later in:'
-print '	Settings > Region & Language'
-print '	Settings > Keyboard'
+pout('Great. You can choose between them later in:',
+'Settings > Region & Language',
+'Settings > Keyboard')
 
 -- Hostname, user, password
 log[9] = {'What would you call your computer (hostname)?',{
@@ -276,9 +279,9 @@ end
 
 -- Packages and services
 pout('Amazing! Lastly, let\'s install some packages',
-	'Navigate to desired poi.list at GitHub',
-	'Format:  user/repo/branch',
-	'(Press Enter to use default)')
+'Navigate to desired poi.list at GitHub',
+'Format:  user/repo/branch',
+'(Press Enter to use default)')
 io.write '>> raw.githubusercontent.com/ '
 
 -- (Get file)
@@ -325,19 +328,18 @@ out('systemctl disable '..table.concat(poi.Services_Disable, ' '))
 out 'export QT_QPA_PLATFORMTHEME="qt5ct"'
 
 -- Extra
-log[11] = {'Wanna install [poi.extra] from '..github..'?', {
+log[11] = {'Wanna download extra scripts?', {
 	y = function()
-		out(string.format('curl -L %sreineimi/arch/x/.bashrc > /home/%s/.bashrc', raw, poi.user))
-		out('curl -o /home/'..poi.user..'/poi.eimi '..raw..'reineimi/archpoi/x/poi.eimi')
-		out('curl -o /poi.extra '..raw..github..'/poi.extra')
-		out 'sh poi.extra && rm poi.extra'
-		pout 'Run "sh poi.eimi" after booting into system'
-		print '	in case you wanna install additional packages'
+		out(string.format('curl %sreineimi/arch/x/.bashrc > /home/%s/.bashrc', raw, poi.user))
+		out(string.format('curl %sreineimi/archpoi/x/poi.eimi > /home/%s/poi.eimi', raw, poi.user))
+		out(string.format('curl %s%s/poi.extra > /home/%s/poi.extra', raw, github, poi.user))
+		pout('You can run "sh poi.extra" and "sh poi.eimi" for extra',
+		'packages and configurations once booted into system')
 	end,
 	n = 0
 }}
 say(11, 'n')
 
-pout('Done! Have a good time!', 'You can find me at: '..link)
+pout('Done! Have a good day!', 'You can find me at: '..link)
 print '\n[i] Write "reboot" to reboot (possibly need to write "exit" first)\n'
 os.execute('sleep 2; rm poi.lua; rm poi.list; umount -l /mnt; exit; systemctl poweroff')

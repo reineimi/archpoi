@@ -16,6 +16,7 @@ gnome-tweaks
 qt5ct
 systemd-ui
 transmission-gtk
+noto-fonts-cjk
 
 # Packages_Remove
 gnome-software

@@ -9,10 +9,5 @@ sh install.sh;
 cd && rm -rf "Reversal-icon-theme";
 gsettings set org.gnome.desktop.interface icon-theme "Reversal";
 
-packages=(
-	noto-fonts-cjk
-);
-pacman -S "${packages[@]}";
-
 printf '\nPoi >> Have a good day!\n(https://github.com/reineimi/archpoi)\n'
 rm -f poi.extra;
