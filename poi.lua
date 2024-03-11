@@ -275,6 +275,8 @@ log[10] = {'Proceed?',{
 	q = q
 }}
 say(10, 'y')
+
+out 'export QT_QPA_PLATFORMTHEME="qt5ct"'
 end
 
 -- Packages and services
@@ -325,7 +327,6 @@ os.execute('pacman -S '..table.concat(poi.Packages_Add, ' '))
 os.execute('pacman -Rdd '..table.concat(poi.Packages_Remove, ' '))
 out('systemctl enable '..table.concat(poi.Services_Enable, ' '))
 out('systemctl disable '..table.concat(poi.Services_Disable, ' '))
-out 'export QT_QPA_PLATFORMTHEME="qt5ct"'
 
 -- Extra
 log[11] = {'Wanna download extra scripts?', {
