@@ -276,7 +276,7 @@ log[10] = {'Proceed?',{
 }}
 say(10, 'y')
 
-out 'export QT_QPA_PLATFORMTHEME="qt5ct"'
+out 'echo \'QT_QPA_PLATFORMTHEME="qt5ct"\' >> /etc/environment'
 end
 
 -- Packages and services
