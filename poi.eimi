@@ -3,8 +3,8 @@
 # PACKAGE LISTS
 packages=(
 	vivaldi
-	wireshark
-	spotify
+	wireshark-qt
+	spotify-launcher
 	obs-studio
 	telegram-desktop
 	discord
