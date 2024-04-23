@@ -2,17 +2,21 @@
 
 # PACKAGE LISTS
 packages=(
+	gnome-boxes
 	vivaldi
 	wireshark-qt
+	firewalld
+	fail2ban
 	spotify-launcher
 	obs-studio
 	telegram-desktop
 	discord
-	virtualbox
-	virtualbox-host-modules-arch
+	tuba
+	element-desktop
+	gimp
+	torbrowser-launcher
 );
 aur_packages=(
-	bibata-cursor-theme
 	adwaita-qt-git
 	qimgv
 );
@@ -34,5 +38,7 @@ done;
 # CONFIGURATIONS
 curl https://raw.githubusercontent.com/zb3/gnome-gamma-tool/main/gnome-gamma-tool.py > ~/Documents/ggamma.py;
 ~/Documents/ggamma.py -g 0.85:0.83:0.84 -t 6100 -c 1.07;
+
+sudo systemctl enable fail2ban; sudo systemctl start fail2ban;
 
 sudo rm -f poi.eimi;
