@@ -39,12 +39,16 @@ for i in ${aur_packages[@]}; do
 done;
 
 # CONFIGURATIONS
+
+# gnome-gamma-tool
 curl https://raw.githubusercontent.com/zb3/gnome-gamma-tool/main/gnome-gamma-tool.py > ~/Documents/ggamma.py;
 ~/Documents/ggamma.py -g 0.85:0.83:0.84 -t 6100 -c 1.07;
 
+# fail2ban
 sudo systemctl enable fail2ban; sudo systemctl start fail2ban;
 
-sudo systemctl enable apparmor
+# apparmor
+sudo systemctl enable apparmor;
 sudo sed -i 's/"loglevel=3 quiet"/"loglevel=3 quiet lsm=landlock,lockdown,yama,integrity,apparmor,bpf"/' /etc/default/grub;
 sudo grub-mkconfig -o /boot/grub/grub.cfg;
 
