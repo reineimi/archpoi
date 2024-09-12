@@ -1,6 +1,9 @@
 # Packages_Add
 archlinux-keyring
 base-devel
+luajit
+luarocks
+os-prober
 make
 git
 networkmanager
@@ -10,13 +13,19 @@ hwinfo
 gnome
 gnome-terminal
 gnome-browser-connector
-geary
-file-roller
 gnome-tweaks
+gnome-boxes
+file-roller
 qt5ct
 systemd-ui
 transmission-gtk
 noto-fonts-cjk
+rsync
+gpaste
+xf86-input-libinput
+xf86-video-intel
+ntfs-3g
+wireplumber
 
 # Packages_Remove
 gnome-software
