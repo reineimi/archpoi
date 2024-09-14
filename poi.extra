@@ -7,48 +7,43 @@ printf "\nPoi >> Now, let's secure this system\n";
 echo 'Poi >> Following this article (firejail included):';
 printf '	https://medium.com/@0xA1031/5-ways-to-secure-your-arch-linux-fb78818f6469\n\n';
 
-printf '\n\n--> ufw >> deny incoming ; allow outgoing\n';
+printf '\n--> ufw >> deny incoming ; allow outgoing\n';
 sudo pacman -S ufw;
 sudo ufw enable;
 sudo ufw default deny incoming;
 sudo ufw default allow outgoing;
 
-printf '\n\n--> fail2ban\n';
+printf '\n--> fail2ban\n';
 sudo pacman -S fail2ban;
 sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local;
 sudo systemctl start fail2ban;
 sudo systemctl enable fail2ban;
 
-echo 'Please uncomment (remove #) the following lines in the';
-echo 'file that will appear in 4 seconds:';
-printf '\n\n[community]\nInclude = /etc/pacman.d/mirrorlist\n\n';
-sleep 4;
-sudo nano /etc/pacman.conf;
-
-printf '\n\n--> apparmor\n';
+printf '\n--> apparmor\n';
 sudo pacman -S apparmor;
 sudo systemctl start apparmor;
 sudo systemctl enable apparmor;
 sudo aa-enforce /etc/apparmor.d/*;
-echo 'apparmor >> Please add ",apparmor" at the end of the "GRUB_CMDLINE_LINUX_DEFAULT"';
-echo '		argument list in the file that will appear in 4 seconds';
-sleep 4;
+printf '\napparmor >> Please replace the line "GRUB_CMDLINE_LINUX_DEFAULT..." with:\n';
+printf '\nGRUB_CMDLINE_LINUX_DEFAULT="quiet splash lsm=landlock,lockdown,yama,apparmor,bpf"\n\n';
+echo '(file will open in 7 seconds)';
+sleep 7;
 sudo nano /etc/default/grub;
 grub-mkconfig -o /boot/grub/grub.cfg;
 
-printf '\n\n--> firejail\n';
+printf '\n--> firejail\n';
 sudo pacman -S firejail;
 sudo firecfg;
 echo 'firejail >> To manually run application in firejail sandbox, run:';
 echo '		"firejail <application>" or add this argument to corresponding .desktop files';
 
-printf '\n\n--> lynis\n';
+printf '\n--> lynis\n';
 sudo pacman -S lynis audit;
 sudo systemctl start auditd;
 sudo systemctl enable auditd;
 sudo lynis audit system;
 
-printf "\n\nPoi >> Lastly, let's make desktop look better\n";
+printf "\nPoi >> Lastly, let's make desktop look better\n";
 printf '		with Reversal icon theme and Bibata cursor!\n\n';
 
 echo '--> Bibata cursor...';
@@ -66,5 +61,5 @@ sh install.sh;
 cd && rm -rf 'Reversal-icon-theme';
 gsettings set org.gnome.desktop.interface icon-theme 'Reversal';
 
-printf '\n\nPoi >> All done, have a good day!\n(https://github.com/reineimi/archpoi)\n';
+printf '\nPoi >> All done, have a good day!\n(https://github.com/reineimi/archpoi)\n';
 rm -f poi.extra;
