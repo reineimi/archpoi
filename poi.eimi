@@ -23,10 +23,8 @@ aur_packages=(
 
 # AUR HANDLER
 aur() {
-	mkdir tempgit && cd tempgit;
 	git clone https://aur.archlinux.org/$1.git;
-	cd $1 && makepkg -si;
-	cd && rm -rf tempgit;
+	cd $1; makepkg -si; cd;
 }
 
 # PACKAGE INSTALLATION
@@ -37,6 +35,13 @@ done;
 for i in ${aur_packages[@]}; do
 	aur $i;
 done;
+
+read -p "Delete AUR (git) package builds? (y/N): " a;
+if [[ $a == "y" ]]; then
+	for i in ${aur_packages[@]}; do
+		rm -rfv $i;
+	done;
+fi;
 
 # CONFIGURATIONS
 curl https://raw.githubusercontent.com/zb3/gnome-gamma-tool/main/gnome-gamma-tool.py > ~/Documents/ggamma.py;
