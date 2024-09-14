@@ -19,6 +19,7 @@ packages=(
 aur_packages=(
 	adwaita-qt-git
 	qimgv
+	woeusb
 );
 
 # AUR HANDLER
