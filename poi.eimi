@@ -4,7 +4,6 @@
 packages=(
 	mpv
 	vivaldi
-	wireshark
 	wireshark-qt
 	obs-studio
 	telegram-desktop
@@ -31,7 +30,10 @@ aur() {
 }
 
 # PACKAGE INSTALLATION
-sudo pacman -S "${packages[@]}";
+for i in ${packages[@]}; do
+	sudo pacman -S $i;
+done;
+
 for i in ${aur_packages[@]}; do
 	aur $i;
 done;
