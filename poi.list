@@ -1,6 +1,7 @@
 # Packages_Add
 archlinux-keyring
 base-devel
+linux-hardened
 luajit
 luarocks
 os-prober
