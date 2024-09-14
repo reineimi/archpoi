@@ -1,3 +1,19 @@
+# Pre-usage
+In case you didn't know, once booted into your archiso, if you don't have a wired connection, use the following commands to connect to wifi:
+```
+iwctl
+station list
+```
+Find your station, for example `wlan0`, and:
+```
+station wlan0 get-networks
+```
+Then connect to your network using:
+```
+station wlan0 connect YOURNETWORK
+exit
+```
+
 # Usage
 ### Boot into live ISO and write:
 ```bash
