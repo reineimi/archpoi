@@ -1,13 +1,70 @@
 #!/bin/sh
-printf "Poi >> Let's apply extra configurations!\n";
-
+echo "Poi >> Let's apply extra configurations!";
+echo 'Poi >> Enter your password to update databases';
 sudo pacman -Syy;
 
+printf "\nPoi >> Now, let's secure this system\n";
+echo 'Poi >> Following this article (firejail included):';
+printf '	https://medium.com/@0xA1031/5-ways-to-secure-your-arch-linux-fb78818f6469\n\n';
+
+printf '\n\n--> ufw >> deny incoming ; allow outgoing\n';
+sudo pacman -S ufw;
+sudo ufw enable;
+sudo ufw default deny incoming;
+sudo ufw default allow outgoing;
+
+printf '\n\n--> fail2ban\n';
+sudo pacman -S fail2ban;
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local;
+sudo systemctl start fail2ban;
+sudo systemctl enable fail2ban;
+
+echo 'Please uncomment (remove #) the following lines in the';
+echo 'file that will appear in 4 seconds:';
+printf '\n\n[community]\nInclude = /etc/pacman.d/mirrorlist\n\n';
+sleep 4;
+sudo nano /etc/pacman.conf;
+
+printf '\n\n--> apparmor\n';
+sudo pacman -S apparmor;
+sudo systemctl start apparmor;
+sudo systemctl enable apparmor;
+sudo aa-enforce /etc/apparmor.d/*;
+echo 'apparmor >> Please add ",apparmor" at the end of the "GRUB_CMDLINE_LINUX_DEFAULT"';
+echo '		argument list in the file that will appear in 4 seconds';
+sleep 4;
+sudo nano /etc/default/grub;
+grub-mkconfig -o /boot/grub/grub.cfg;
+
+printf '\n\n--> firejail\n';
+sudo pacman -S firejail;
+sudo firecfg;
+echo 'firejail >> To manually run application in firejail sandbox, run:';
+echo '		"firejail <application>" or add this argument to corresponding .desktop files';
+
+printf '\n\n--> lynis\n';
+sudo pacman -S lynis audit;
+sudo systemctl start auditd;
+sudo systemctl enable auditd;
+sudo lynis audit system;
+
+printf "\n\nPoi >> Lastly, let's make desktop look better\n";
+printf '		with Reversal icon theme and Bibata cursor!\n\n';
+
+echo '--> Bibata cursor...';
+cd ~/Downloads;
+curl -LO https://github.com/ful1e5/Bibata_Cursor/releases/download/v2.0.7/Bibata-Modern-Ice.tar.xz;
+tar -xvf Bibata-Modern-Ice.tar.xz;
+rm -f Bibata-Modern-Ice.tar.xz;
+sudo mv Bibata-Modern-Ice /usr/share/icons/;
+gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Ice';
+
+echo '--> Reversal icons...';
 git clone https://github.com/yeyushengfan258/Reversal-icon-theme.git;
 cd Reversal-icon-theme;
 sh install.sh;
-cd && rm -rf "Reversal-icon-theme";
-gsettings set org.gnome.desktop.interface icon-theme "Reversal";
+cd && rm -rf 'Reversal-icon-theme';
+gsettings set org.gnome.desktop.interface icon-theme 'Reversal';
 
-printf '\nPoi >> Have a good day!\n(https://github.com/reineimi/archpoi)\n'
+printf '\n\nPoi >> All done, have a good day!\n(https://github.com/reineimi/archpoi)\n';
 rm -f poi.extra;

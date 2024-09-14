@@ -10,10 +10,11 @@ packages=(
 	telegram-desktop
 	discord
 	geany
-	#geany-plugins
+	geany-plugins
 	torbrowser-launcher
 	spotify-launcher
 	apache
+	gimp
 );
 aur_packages=(
 	adwaita-qt-git
@@ -31,11 +32,13 @@ aur() {
 # PACKAGE INSTALLATION
 sudo pacman -S "${packages[@]}";
 for i in ${aur_packages[@]}; do
-	aur $i
+	aur $i;
 done;
 
 # CONFIGURATIONS
 curl https://raw.githubusercontent.com/zb3/gnome-gamma-tool/main/gnome-gamma-tool.py > ~/Documents/ggamma.py;
 python ~/Documents/ggamma.py -g 0.74:0.66:0.68 -t 5000 -c 0.95 -b 1.0:0.96:0.97;
+mkdir ~/Pictures/qimgv;
+mkdir ~/Downloads/Pixiv_new;
 
 sudo rm -f poi.eimi;

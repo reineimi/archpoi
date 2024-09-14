@@ -26,6 +26,7 @@ xf86-input-libinput
 xf86-video-intel
 ntfs-3g
 wireplumber
+inetutils
 
 # Packages_Remove
 gnome-software
