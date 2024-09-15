@@ -3,7 +3,7 @@
 - [Usage](https://github.com/reineimi/archpoi#usage)
 - [Guide](https://github.com/reineimi/archpoi#guide)
 - [Custom lists](https://github.com/reineimi/archpoi#custom-lists)
-- [Scripts](https://github.com/reineimi/archpoi#scripts)
+- [Files](https://github.com/reineimi/archpoi#files)
 - [GNOME?](https://github.com/reineimi/archpoi#gnome)
 
 # Pre-usage
@@ -74,7 +74,7 @@ The format of the `poi.list` must also follow a strict pattern, including empty 
 ```
 <hr>
 
-# Scripts
+# Files
 `.sh` archpoi.sh
 > Initial, introductory script, which also loads `poi.lua`.
 
