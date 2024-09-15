@@ -37,7 +37,7 @@ curl -LO raw.githubusercontent.com/reineimi/archpoi/x/archpoi.sh; sh archpoi.sh
 What you have to do is create:
 1. Boot partition (usually `+512M` in size)
 2. Root partition (any desired size)
-3. Swap partition (usually **minimum** `+4G` in size)
+3. Swap partition (usually either not set up or is minimum `+4G` in size, extends RAM space)
 #
 Then run `lua poi.lua` and go through what's written in the console - in other words, **second stage**.
 #
