@@ -7,7 +7,7 @@
 - [GNOME?](https://github.com/reineimi/archpoi#gnome)
 
 # Pre-usage
-In case you didn't know, once booted into your archiso, if you don't have a wired connection, use the following commands to connect to wifi:
+In case you didn't know, once booted into your archiso, if you don't have a wired connection, use the following commands to discover and connect to wifi:
 ```
 iwctl
 station list
@@ -18,8 +18,13 @@ station wlan0 get-networks
 ```
 Then connect to your network using:
 ```
-station wlan0 connect YOURNETWORK
+station wlan0 connect MYNETWORK
 exit
+```
+#
+Or, in case you already know your station and network name:
+```
+iwctl station wlan0 connect MYNETWORK
 ```
 
 # Usage
