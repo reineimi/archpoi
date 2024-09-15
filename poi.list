@@ -29,6 +29,7 @@ xf86-video-intel
 ntfs-3g
 wireplumber
 inetutils
+bluez-utils
 archiso
 
 # Packages_Remove
