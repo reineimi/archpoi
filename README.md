@@ -1,3 +1,11 @@
+## Contents:
+- [Pre-usage](https://github.com/reineimi/archpoi#pre-usage)
+- [Usage](https://github.com/reineimi/archpoi#usage)
+- [Guide](https://github.com/reineimi/archpoi#guide)
+- [Custom lists](https://github.com/reineimi/archpoi#custom-lists)
+- [Scripts](https://github.com/reineimi/archpoi#scripts)
+- [GNOME?](https://github.com/reineimi/archpoi#gnome)
+
 # Pre-usage
 In case you didn't know, once booted into your archiso, if you don't have a wired connection, use the following commands to connect to wifi:
 ```
