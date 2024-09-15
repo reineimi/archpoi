@@ -16,8 +16,6 @@ packages=(
 	gimp
 	fcitx5
 	fcitx5-mozc
-	fcitx5-skk
-	fcitx5-kkc
 	fcitx5-configtool
 	fcitx5-gtk
 );
