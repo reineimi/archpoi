@@ -52,7 +52,7 @@ In this case you'd have to skip *automatic installation*, *disk formatting* and 
 #
 After all's done, however, you might not be able to find your system in the boot menu.
 
-In that case you should **create** a new boot entry.<br>
+In that case you should **create** a new boot entry in your bootloader.<br>
 You'll find the image somewhere among the listed filesystems under `efi/GRUB/grubx64.efi`.
 #
 If you've installed *extra scripts*, then, after booting into system, you can open terminal and run `sh poi.extra` and `sh poi.eimi` if needed.
