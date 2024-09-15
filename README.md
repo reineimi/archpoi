@@ -23,6 +23,27 @@ curl -LO bit.ly/archpoi; sh archpoi
 ```bash
 curl -LO raw.githubusercontent.com/reineimi/archpoi/x/archpoi.sh; sh archpoi.sh
 ```
+
+# Guide
+**First stage** - you'll go through disk setup process.<br>
+What you have to do is create:
+1. Boot partition (usually `+512M` in size)
+2. Root partition (any desired size)
+3. Swap partition (usually **minimum** `+4G` in size)
+#
+Then run `lua poi.lua` and go through what's written in the console - in other words, **second stage**.
+#
+The **third stage** comes after you've installed the system according to the script and ran `lua poi.lua` once again.
+
+In this case you'd have to skip *automatic installation*, *disk formatting* and *system installation* processess and proceed to further steps - bootloader installation and more.
+#
+After all's done, however, you might not be able to find your system in the boot menu.
+
+In that case you should **create** a new boot entry.<br>
+You'll find the image somewhere among the listed filesystems under `efi/GRUB/grubx64.efi`.
+#
+If you've installed *extra scripts*, then, after booting into system, you can open terminal and run `sh poi.extra` and `sh poi.eimi` if needed.
+
 <hr>
 
 # Custom lists
