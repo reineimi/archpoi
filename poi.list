@@ -28,6 +28,7 @@ xf86-video-intel
 ntfs-3g
 wireplumber
 inetutils
+archiso
 
 # Packages_Remove
 gnome-software
