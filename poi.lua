@@ -219,7 +219,7 @@ log[8] = {'Install Linux? (Skip if already did)',{
 	end,
 	n = function()
 		os.execute 'arch-chroot /mnt'
-		out 'pacman -S sudo nano curl'
+		out 'pacman -S --noconfirm sudo nano curl'
 	end,
 	q = q
 }}
@@ -261,7 +261,7 @@ say(9, 'archlinux')
 pout 'Installing GRUB bootloader...'
 log[10] = {'Proceed?',{
 	y = function()
-		out 'pacman -S grub efibootmgr'
+		out 'pacman -S --noconfirm grub efibootmgr'
 		out 'mkdir /boot/efi'
 		out('mount /dev/'..sdx..pboot..' /boot/efi')
 		out('grub-install --target=i386-pc /dev/'..sdx)
