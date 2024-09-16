@@ -57,6 +57,8 @@ You'll find the image somewhere among the listed filesystems under `efi/GRUB/gru
 #
 If you've installed *extra scripts*, then, after booting into system, you can open terminal and run `sh poi.extra` and `sh poi.eimi` if needed.
 
+⚠️ Additionally, it's recommended to run `cleanup` command (declared in my `.bashrc`) in order to delete the installation files left by `pacman` to free up some disk space. You can do that occasionally.
+
 <hr>
 
 # Custom lists
