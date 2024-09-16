@@ -21,8 +21,6 @@ file-roller
 qt5ct
 systemd-ui
 transmission-gtk
-noto-fonts-cjk
-ttf-roboto
 rsync
 gpaste
 xf86-input-libinput
@@ -33,6 +31,10 @@ inetutils
 bluez-utils
 archiso
 dconf-editor
+ttf-roboto
+adobe-source-han-sans-jp-fonts
+adobe-source-han-sans-kr-fonts
+adobe-source-han-sans-cn-fonts
 lightdm
 lightdm-gtk-greeter
 
