@@ -22,6 +22,7 @@ qt5ct
 systemd-ui
 transmission-gtk
 noto-fonts-cjk
+ttf-roboto
 rsync
 gpaste
 xf86-input-libinput
