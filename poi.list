@@ -33,6 +33,8 @@ inetutils
 bluez-utils
 archiso
 dconf-editor
+lightdm
+lightdm-gtk-greeter
 
 # Packages_Remove
 gnome-software
