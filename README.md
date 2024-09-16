@@ -28,11 +28,11 @@ iwctl station wlan0 connect MYNETWORK
 ```
 
 # Usage
-### Boot into live ISO and write:
+Boot into live ISO and write:
 ```bash
 curl -LO bit.ly/archpoi; sh archpoi
 ```
-### Or, in case you don't like short links:
+Or, in case you don't like short links:
 ```bash
 curl -LO raw.githubusercontent.com/reineimi/archpoi/x/archpoi.sh; sh archpoi.sh
 ```
