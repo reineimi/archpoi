@@ -233,7 +233,7 @@ if poi.response then
 	pout('Done! Now choose preferred locales',
 	'(delete #, then press Ctrl+S and Ctrl+X);',
 	'Default (en_US.UTF-8) will be added automatically\n')
-	os.execute 'sleep 4 && nano /etc/locale.gen'
+	os.execute 'sleep 7 && nano /etc/locale.gen'
 end
 os.execute 'echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen'
 out 'locale-gen && echo "LANG=en_US.UTF-8" >> /etc/locale.conf'
@@ -323,7 +323,9 @@ end
 for i = 1,4 do loop() end
 
 -- (Load items)
-os.execute('pacman -S '..table.concat(poi.Packages_Add, ' '))
+for _, v in ipairs(poi.Packages_Add) do
+	os.execute('pacman -S --noconfirm '..v)
+end
 os.execute('pacman -Rdd '..table.concat(poi.Packages_Remove, ' '))
 out('systemctl enable '..table.concat(poi.Services_Enable, ' '))
 out('systemctl disable '..table.concat(poi.Services_Disable, ' '))
