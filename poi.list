@@ -1,5 +1,5 @@
 # Packages_Add
-linux-zen
+linux-hardened
 archlinux-keyring
 base-devel
 luajit
