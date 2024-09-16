@@ -1,7 +1,7 @@
 # Packages_Add
+linux-zen
 archlinux-keyring
 base-devel
-linux-hardened
 luajit
 luarocks
 os-prober
