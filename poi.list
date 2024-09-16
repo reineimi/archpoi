@@ -39,6 +39,7 @@ lightdm
 lightdm-gtk-greeter
 
 # Packages_Remove
+linux
 gnome-software
 
 # Services_Enable
