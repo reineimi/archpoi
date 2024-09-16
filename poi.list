@@ -45,5 +45,6 @@ gnome-software
 # Services_Enable
 gdm
 NetworkManager
+bluetooth
 
 # Services_Disable
