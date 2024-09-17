@@ -13,6 +13,7 @@ packages=(
 	torbrowser-launcher
 	spotify-launcher
 	apache
+	polari
 	gimp
 	fcitx5
 	fcitx5-mozc
