@@ -33,6 +33,7 @@ grub-mkconfig -o /boot/grub/grub.cfg;
 
 printf '\n\n--> firejail\n';
 sudo pacman -S firejail;
+sudo apparmor_parser -r /etc/apparmor.d/firejail-default;
 echo 'firejail >> To manually run application in firejail sandbox, run:';
 echo '		"firejail --apparmor <application>"';
 echo '		or add this argument to corresponding .desktop files';
