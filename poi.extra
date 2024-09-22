@@ -31,15 +31,17 @@ sleep 7;
 sudo nano /etc/default/grub;
 grub-mkconfig -o /boot/grub/grub.cfg;
 
-printf '\n--> bubblewrap\n';
-sudo pacman -S --noconfirm bubblewrap-suid;
-echo 'bubblewrap >> https://wiki.archlinux.org/title/Bubblewrap';
+printf '\n\n--> firejail\n';
+sudo pacman -S firejail;
+echo 'firejail >> To manually run application in firejail sandbox, run:';
+echo '		"firejail --apparmor <application>"';
+echo '		or add this argument to corresponding .desktop files';
 
 printf '\n--> lynis\n';
 sudo pacman -S lynis audit;
 sudo systemctl start auditd;
 sudo systemctl enable auditd;
-sudo lynis audit system;
+echo 'lynis >> Run: "sudo lynis audit system" to list vulnerabilities';
 
 printf "\nPoi >> Lastly, let's make desktop look better\n";
 printf '		with Reversal icon theme and Bibata cursor!\n\n';
