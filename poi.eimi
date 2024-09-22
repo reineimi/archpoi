@@ -24,6 +24,7 @@ aur_packages=(
 	adwaita-qt-git
 	qimgv
 	woeusb
+	hardened_malloc
 );
 
 # AUR HANDLER
@@ -53,5 +54,6 @@ curl https://raw.githubusercontent.com/zb3/gnome-gamma-tool/main/gnome-gamma-too
 python ~/Documents/ggamma.py -g 0.74:0.66:0.68 -t 5000 -c 0.95 -b 1.0:0.96:0.97;
 mkdir ~/Pictures/qimgv;
 mkdir ~/Downloads/Pixiv_new;
+env LD_PRELOAD=/usr/lib/libhardened_malloc.so;
 
 sudo rm -f poi.eimi;
