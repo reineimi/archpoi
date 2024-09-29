@@ -38,6 +38,7 @@ adobe-source-han-sans-cn-fonts
 lightdm
 lightdm-gtk-greeter
 imagemagick
+perl-image-exiftool
 
 # Packages_Remove
 gnome-software
