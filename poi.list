@@ -37,6 +37,9 @@ adobe-source-han-sans-kr-fonts
 adobe-source-han-sans-cn-fonts
 lightdm
 lightdm-gtk-greeter
+cwebp
+jpegoptim
+optipng
 
 # Packages_Remove
 gnome-software
