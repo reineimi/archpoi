@@ -11,6 +11,7 @@ networkmanager
 ffmpeg
 neofetch
 hwinfo
+man-db
 gnome
 gnome-terminal
 gnome-browser-connector
