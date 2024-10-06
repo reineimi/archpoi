@@ -8,6 +8,7 @@ os-prober
 make
 git
 networkmanager
+nmap
 ffmpeg
 neofetch
 hwinfo
@@ -40,6 +41,7 @@ lightdm
 lightdm-gtk-greeter
 imagemagick
 perl-image-exiftool
+xorg-xwininfo
 
 # Packages_Remove
 gnome-software
