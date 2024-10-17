@@ -25,6 +25,7 @@ systemd-ui
 transmission-gtk
 rsync
 gpaste
+seahorse
 xf86-input-libinput
 xf86-video-intel
 ntfs-3g
