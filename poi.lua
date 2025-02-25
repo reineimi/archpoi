@@ -1,7 +1,7 @@
 -- Automated, lightning-fast installation of Arch Linux on GNOME
 -- With <3 by @reineimi | github.com/reineimi
 local link = 'https://github.com/reineimi/archpoi'
-print('arch.poi | Version: 1.3.1 | '..link)
+print('arch.poi | Version: 1.3.3 | '..link)
 local ind, log, poi = 0, {}, {
 	user = 'root',
 	response = true,
@@ -266,9 +266,7 @@ log[10] = {'Proceed?',{
 		out('mount /dev/'..sdx..pboot..' /boot/efi')
 		out('grub-install --target=i386-pc /dev/'..sdx)
 		out 'grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB'
-		if poi.response then
-			os.execute 'nano /etc/default/grub'
-		end
+		out 'echo "GRUB_DISABLE_SUBMENU=y\nGRUB_DEFAULT=saved\nGRUB_SAVEDEFAULT=true" >> /etc/default/grub'
 		out 'grub-mkconfig -o /boot/grub/grub.cfg'
 	end,
 	n = 0,
@@ -341,7 +339,7 @@ log[11] = {'Wanna download extra scripts?', {
 	end,
 	n = 0
 }}
-say(11, 'n')
+say(11, 'y')
 
 pout('Done! Have a good day!', 'You can find me at: '..link)
 print '\n[i] Write "reboot" to reboot (possibly need to write "exit" first)\n'
