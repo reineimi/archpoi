@@ -274,7 +274,9 @@ log[10] = {'Proceed?',{
 }}
 say(10, 'y')
 
-out 'export QT_QPA_PLATFORMTHEME="qt5ct"'
+out 'export QT_QPA_PLATFORM="wayland"'
+out 'export QT_QPA_PLATFORMTHEME="gtk3"'
+out 'export QT_STYLE_OVERRIDE="adwaita-dark"'
 end
 
 -- Packages and services
