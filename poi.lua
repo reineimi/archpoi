@@ -230,10 +230,11 @@ out('ln -sf /usr/share/zoneinfo/'..poi.tz..' /etc/localtime && hwclock --systohc
 
 -- Locale
 if poi.response then
-	pout('Done! Now choose preferred locales',
+	pout('Done! Now press Enter to choose preferred locales',
 	'(delete #, then press Ctrl+S and Ctrl+X);',
-	'Default (en_US.UTF-8) will be added automatically\n')
-	os.execute 'sleep 7 && nano /etc/locale.gen'
+	'Default (en_US.UTF-8) will be added automatically')
+	io.read()
+	os.execute 'nano /etc/locale.gen'
 end
 os.execute 'echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen'
 out 'locale-gen && echo "LANG=en_US.UTF-8" >> /etc/locale.conf'
@@ -274,9 +275,17 @@ log[10] = {'Proceed?',{
 }}
 say(10, 'y')
 
-out 'export QT_QPA_PLATFORM="wayland"'
-out 'export QT_QPA_PLATFORMTHEME="gtk3"'
-out 'export QT_STYLE_OVERRIDE="adwaita-dark"'
+-- Last steps and desktop configuration
+local steps = {
+	'export QT_QPA_PLATFORM="wayland"',
+	'export QT_QPA_PLATFORMTHEME="gtk3"',
+	'export QT_STYLE_OVERRIDE="adwaita-dark"',
+	'pacman -R bubblewrap',
+	'pacman -S bubblewrap-suid',
+	'sudo rm -f /var/cache/pacman/pkg/*'
+}
+for _,v in ipairs(steps) do out(v) end
+
 end
 
 -- Packages and services
@@ -329,6 +338,7 @@ end
 os.execute('pacman -Rdd '..table.concat(poi.Packages_Remove, ' '))
 out('systemctl enable '..table.concat(poi.Services_Enable, ' '))
 out('systemctl disable '..table.concat(poi.Services_Disable, ' '))
+out('sudo rm -f /var/cache/pacman/pkg/*')
 
 -- Extra
 log[11] = {'Wanna download extra scripts?', {
