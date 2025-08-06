@@ -280,6 +280,7 @@ local steps = {
 	'export QT_QPA_PLATFORM="wayland"',
 	'export QT_QPA_PLATFORMTHEME="gtk3"',
 	'export QT_STYLE_OVERRIDE="adwaita-dark"',
+	'gsettings set org.gnome.desktop.screensaver lock-delay 600',
 	'pacman -R bubblewrap',
 	'pacman -S bubblewrap-suid',
 	'sudo rm -f /var/cache/pacman/pkg/*'
