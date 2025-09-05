@@ -42,6 +42,8 @@ lightdm-gtk-greeter
 imagemagick
 perl-image-exiftool
 xorg-xwininfo
+net-tools
+shadowsocks-rust
 
 # Packages_Remove
 gnome-software
