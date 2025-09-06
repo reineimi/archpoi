@@ -26,10 +26,10 @@ sudo systemctl enable apparmor;
 sudo aa-enforce /etc/apparmor.d/*;
 printf '\napparmor >> Please replace the line "GRUB_CMDLINE_LINUX_DEFAULT..." with:\n';
 printf '\nGRUB_CMDLINE_LINUX_DEFAULT="quiet splash lsm=landlock,lockdown,yama,apparmor,bpf"\n\n';
-echo '(file will open in 7 seconds)';
-sleep 7;
+echo '(press Enter to open GRUB config)';
+read _wait;
 sudo nano /etc/default/grub;
-grub-mkconfig -o /boot/grub/grub.cfg;
+sudo grub-mkconfig -o /boot/grub/grub.cfg;
 
 printf '\n\n--> firejail\n';
 sudo pacman -S firejail;
