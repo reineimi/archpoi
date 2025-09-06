@@ -3,6 +3,11 @@ echo "Poi >> Let's apply extra configurations!";
 echo 'Poi >> Enter your password to update databases';
 sudo pacman -Syy;
 
+export QT_QPA_PLATFORM="wayland";
+export QT_QPA_PLATFORMTHEME="gtk3";
+export QT_STYLE_OVERRIDE="adwaita-dark";
+gsettings set org.gnome.desktop.screensaver lock-delay 600;
+
 printf "\nPoi >> Now, let's secure this system\n";
 echo 'Poi >> Following this article (firejail included):';
 printf '	https://medium.com/@0xA1031/5-ways-to-secure-your-arch-linux-fb78818f6469\n\n';
