@@ -12,9 +12,9 @@ packages=(
 	geany-plugins
 	torbrowser-launcher
 	spotify-launcher
-	apache
 	polari
 	gimp
+ nginx
 	fcitx5
 	fcitx5-mozc
 	fcitx5-configtool
