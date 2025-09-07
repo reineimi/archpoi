@@ -44,6 +44,7 @@ perl-image-exiftool
 xorg-xwininfo
 net-tools
 shadowsocks-rust
+psensor
 
 # Packages_Remove
 gnome-software
